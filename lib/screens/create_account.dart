@@ -1,0 +1,100 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:tdms_faculty/components/my_appbar.dart';
+import 'package:tdms_faculty/components/widgets.dart';
+import 'package:tdms_faculty/screens/create_faculty.dart';
+import 'package:tdms_faculty/screens/dashboard.dart';
+import 'package:tdms_faculty/screens/signin.dart';
+
+class CreateAccountScreen extends StatefulWidget {
+  const CreateAccountScreen({super.key});
+
+  @override
+  State<CreateAccountScreen> createState() => _CreateAccountScreenState();
+}
+
+class _CreateAccountScreenState extends State<CreateAccountScreen> {
+  final _emailController = TextEditingController();
+  final _fullnameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(50),
+        child: MyAppbar(title: "Create Account", showActions: false),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            buildTextField('Email Address', _emailController),
+            SizedBox(height: 16),
+            buildTextField('Fullname', _fullnameController),
+            SizedBox(height: 16),
+            buildTextField('Password', _passwordController, isPassword: true),
+            SizedBox(height: 16),
+            buildTextField(
+              'Confirm Password',
+              _confirmPasswordController,
+              isPassword: true,
+            ),
+            SizedBox(height: 40),
+            buildGreenButton('Create Account', () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => DashboardScreen()),
+              );
+            }),
+            SizedBox(height: 20),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => SignInScreen()),
+                );
+              },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+                shadowColor: Colors.white,
+                enableFeedback: false,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                surfaceTintColor: Colors.transparent,
+                foregroundColor: Colors.transparent,
+              ),
+              child: Text(
+                'Already have an account? Sign in',
+                style: GoogleFonts.inter(color: Color(0xFF5E875E)),
+              ),
+            ),
+
+            SizedBox(height: 20),
+            Text(
+              'OR',
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                color: Color(0xFF5E875E),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 20),
+            buildButton('Create Faculty Account', () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => CreateFacultyAccountScreen(),
+                ),
+              );
+            }),
+            SizedBox(height: 20),
+            Text(
+              'By creating an account, you agree to our Terms of Service and Privacy Policy.',
+              style: GoogleFonts.inter(fontSize: 12, color: Color(0xFF5E875E)),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
