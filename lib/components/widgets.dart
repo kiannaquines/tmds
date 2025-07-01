@@ -328,3 +328,20 @@ Widget buildTimelineItem({
     ],
   );
 }
+
+void showMessageSnackbar(
+  BuildContext context,
+  String message, {
+  bool isError = true,
+}) {
+  final snackBar = SnackBar(
+    content: Text(message),
+    backgroundColor:
+        isError ? const Color(0xFFD32F2F) : const Color(0xFF5E875E),
+    behavior: SnackBarBehavior.floating,
+    margin: const EdgeInsets.all(16),
+    duration: const Duration(seconds: 3),
+  );
+
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}

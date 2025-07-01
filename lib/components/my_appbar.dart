@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:tdms_faculty/screens/signin.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tdms_faculty/components/widgets.dart';
 
 class MyAppbar extends StatefulWidget {
   const MyAppbar({
@@ -50,10 +52,21 @@ class _MyAppbarState extends State<MyAppbar> {
                 ),
                 IconButton(
                   icon: Icon(LucideIcons.logOut, color: Color(0xFF5E875E)),
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => SignInScreen()),
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.remove('auth_token');
+
+                    showMessageSnackbar(
+                      context,
+                      'You have been logout.',
+                      isError: false,
                     );
+
+                    if (context.mounted) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => SignInScreen()),
+                      );
+                    }
                   },
                 ),
               ]

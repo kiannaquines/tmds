@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tdms_faculty/components/my_appbar.dart';
 import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/screens/create_account.dart';
 import 'package:tdms_faculty/screens/dashboard.dart';
+import 'package:http/http.dart' as http;
+import 'package:tdms_faculty/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -15,6 +19,45 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  Future<void> login() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    final url = Uri.parse('$apiUrl/login');
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'email': email, 'password': password}),
+    );
+
+    final responseData = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      final token = responseData['access_token'];
+      final message = responseData['message'];
+
+      final prefs = await SharedPreferences.getInstance();
+
+      if (!prefs.containsKey('auth_token')) {
+        await prefs.setString('auth_token', token);
+      }
+
+      showMessageSnackbar(context, message, isError: false);
+      await Future.delayed(Duration(milliseconds: 500));
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => DashboardScreen()),
+      );
+    } else {
+      final message = responseData['message'] ?? 'Login failed';
+      showMessageSnackbar(context, message);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +94,8 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
             ),
             SizedBox(height: 16),
-            buildGreenButton('Sign In', () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => DashboardScreen()),
-              );
+            buildGreenButton('Sign In', () async {
+              await login();
             }),
             SizedBox(height: 20),
             TextButton(

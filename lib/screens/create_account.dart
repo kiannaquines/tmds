@@ -1,10 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tdms_faculty/components/my_appbar.dart';
 import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/screens/create_faculty.dart';
-import 'package:tdms_faculty/screens/dashboard.dart';
 import 'package:tdms_faculty/screens/signin.dart';
+import 'package:tdms_faculty/constants.dart';
+import 'package:http/http.dart' as http;
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -18,6 +20,45 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _fullnameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+
+  Future<void> register() async {
+    final email = _emailController.text.trim();
+    final name = _fullnameController.text.trim();
+    final password = _passwordController.text.trim();
+    final confirmPassword = _confirmPasswordController.text.trim();
+
+    final url = Uri.parse('$apiUrl/register');
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'email': email,
+        'name': name,
+        'password': password,
+        'password_confirmation': confirmPassword,
+      }),
+    );
+
+    final responseData = jsonDecode(response.body);
+
+    if (response.statusCode == 201) {
+      final message = responseData['message'];
+
+      showMessageSnackbar(context, message, isError: false);
+      await Future.delayed(Duration(milliseconds: 500));
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => SignInScreen()),
+      );
+    } else {
+      final message = responseData['message'] ?? 'Registration failed';
+      showMessageSnackbar(context, message);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +84,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               isPassword: true,
             ),
             SizedBox(height: 40),
-            buildGreenButton('Create Account', () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => DashboardScreen()),
-              );
+            buildGreenButton('Create Account', () async {
+              await register();
             }),
             SizedBox(height: 20),
             TextButton(
