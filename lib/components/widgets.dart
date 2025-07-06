@@ -6,6 +6,7 @@ Widget buildTextField(
   String hint,
   TextEditingController controller, {
   bool isPassword = false,
+  bool readOnly = false,
 }) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -21,6 +22,7 @@ Widget buildTextField(
       ],
     ),
     child: TextField(
+      readOnly: readOnly,
       cursorColor: Color(0xFF5E875E),
       controller: controller,
       obscureText: isPassword,

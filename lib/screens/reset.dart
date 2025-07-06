@@ -6,7 +6,9 @@ import 'package:tdms_faculty/constants.dart';
 import 'package:http/http.dart' as http;
 
 class ResetScreen extends StatefulWidget {
-  const ResetScreen({super.key});
+  final String email;
+  final String token;
+  const ResetScreen({super.key, required this.email, required this.token});
 
   @override
   State<ResetScreen> createState() => _ResetScreenState();
@@ -20,7 +22,35 @@ class _ResetScreenState extends State<ResetScreen> {
 
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _emailController.text = widget.email;
+    _tokenController.text = widget.token;
+  }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _passwordConfirmController.dispose();
+    _emailController.dispose();
+    _tokenController.dispose();
+    super.dispose();
+  }
+
   Future<void> resetPassword() async {
+    if (_passwordController.text.trim().isEmpty ||
+        _passwordConfirmController.text.trim().isEmpty) {
+      showMessageSnackbar(context, 'Please fill in all fields', isError: true);
+      return;
+    }
+
+    if (_passwordController.text.trim() !=
+        _passwordConfirmController.text.trim()) {
+      showMessageSnackbar(context, 'Passwords do not match', isError: true);
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
@@ -48,52 +78,69 @@ class _ResetScreenState extends State<ResetScreen> {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        // ignore: use_build_context_synchronously
-        showMessageSnackbar(context, data['message'], isError: false);
+        if (mounted) {
+          showMessageSnackbar(context, data['message'], isError: false);
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        }
       } else {
-        // ignore: use_build_context_synchronously
-        showMessageSnackbar(context, data['message'], isError: true);
+        if (mounted) {
+          showMessageSnackbar(
+            context,
+            data['message'] ?? 'Reset failed',
+            isError: true,
+          );
+        }
       }
     } catch (e) {
-      // ignore: use_build_context_synchronously
-      showMessageSnackbar(context, "$e", isError: true);
+      if (mounted) {
+        showMessageSnackbar(
+          context,
+          "Network error: ${e.toString()}",
+          isError: true,
+        );
+      }
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
+      appBar: const PreferredSize(
         preferredSize: Size.fromHeight(50),
         child: MyAppbar(title: "Reset Password", showActions: false),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             buildTextField(
               'Email Address',
               _emailController,
               isPassword: false,
+              readOnly: true,
             ),
-            SizedBox(height: 16),
-            buildTextField('Password', _passwordController, isPassword: true),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             buildTextField(
-              'Confirm Password',
+              'New Password',
+              _passwordController,
+              isPassword: true,
+            ),
+            const SizedBox(height: 16),
+            buildTextField(
+              'Confirm New Password',
               _passwordConfirmController,
               isPassword: true,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             buildGreenButton(
-              _isLoading ? 'Loading' : 'Reset Password',
-              () async {
-                await resetPassword();
-              },
+              _isLoading ? 'Resetting...' : 'Reset Password',
+              () {},
             ),
           ],
         ),
