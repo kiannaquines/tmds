@@ -8,6 +8,8 @@ import 'package:tdms_faculty/screens/dashboard.dart';
 import 'package:http/http.dart' as http;
 import 'package:tdms_faculty/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tdms_faculty/screens/forgot.dart';
+import 'package:tdms_faculty/screens/reset.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -78,7 +80,11 @@ class _SignInScreenState extends State<SignInScreen> {
             Align(
               alignment: Alignment.centerLeft,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => ForgotScreen()),
+                  );
+                },
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
                   shadowColor: Colors.white,
@@ -101,9 +107,7 @@ class _SignInScreenState extends State<SignInScreen> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => CreateAccountScreen(),
-                  ),
+                  MaterialPageRoute(builder: (context) => ResetScreen()),
                 );
               },
               style: TextButton.styleFrom(
