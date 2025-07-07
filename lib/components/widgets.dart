@@ -7,6 +7,7 @@ Widget buildTextField(
   TextEditingController controller, {
   bool isPassword = false,
   bool readOnly = false,
+  bool isNumeric = false,
 }) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -22,6 +23,7 @@ Widget buildTextField(
       ],
     ),
     child: TextField(
+      keyboardType: isNumeric ? TextInputType.phone : TextInputType.text,
       readOnly: readOnly,
       cursorColor: Color(0xFF5E875E),
       controller: controller,

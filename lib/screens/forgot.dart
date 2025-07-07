@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,6 +8,7 @@ import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:tdms_faculty/screens/signin.dart';
+import 'package:tdms_faculty/screens/reset.dart';
 
 class ForgotScreen extends StatefulWidget {
   const ForgotScreen({super.key});
@@ -19,6 +22,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
   bool _isLoading = false;
 
   Future<void> forgotPassword() async {
+    final email = _emailController.text.trim();
     setState(() {
       _isLoading = true;
     });
@@ -29,22 +33,25 @@ class _ForgotScreenState extends State<ForgotScreen> {
       'Content-Type': 'application/json',
     };
 
-    final body = jsonEncode({'email': _emailController.text.trim()});
+    final body = jsonEncode({'email': email});
 
     try {
       final response = await http.post(url, headers: headers, body: body);
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        // ignore: use_build_context_synchronously
         showMessageSnackbar(context, data['message'], isError: false);
+
+        Future.delayed(const Duration(seconds: 3), () {
+          Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (_) => ResetScreen(email: email)));
+        });
       } else {
         final error = jsonDecode(response.body);
-        // ignore: use_build_context_synchronously
         showMessageSnackbar(context, error['message'], isError: true);
       }
     } catch (e) {
-      // ignore: use_build_context_synchronously
       showMessageSnackbar(context, "$e", isError: true);
     } finally {
       setState(() {

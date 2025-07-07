@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/components/my_appbar.dart';
 import 'package:tdms_faculty/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:tdms_faculty/screens/signin.dart';
 
 class ResetScreen extends StatefulWidget {
   final String email;
-  final String token;
-  const ResetScreen({super.key, required this.email, required this.token});
+  const ResetScreen({super.key, required this.email});
 
   @override
   State<ResetScreen> createState() => _ResetScreenState();
@@ -17,6 +18,7 @@ class ResetScreen extends StatefulWidget {
 class _ResetScreenState extends State<ResetScreen> {
   final _passwordController = TextEditingController();
   final _passwordConfirmController = TextEditingController();
+  final _otpController = TextEditingController();
   final _emailController = TextEditingController();
   final _tokenController = TextEditingController();
 
@@ -26,7 +28,6 @@ class _ResetScreenState extends State<ResetScreen> {
   void initState() {
     super.initState();
     _emailController.text = widget.email;
-    _tokenController.text = widget.token;
   }
 
   @override
@@ -40,8 +41,15 @@ class _ResetScreenState extends State<ResetScreen> {
 
   Future<void> resetPassword() async {
     if (_passwordController.text.trim().isEmpty ||
-        _passwordConfirmController.text.trim().isEmpty) {
+        _passwordConfirmController.text.trim().isEmpty ||
+        _otpController.text.trim().isEmpty) {
       showMessageSnackbar(context, 'Please fill in all fields', isError: true);
+      return;
+    }
+
+    if (_passwordController.text.trim() !=
+        _passwordConfirmController.text.trim()) {
+      showMessageSnackbar(context, 'Passwords do not match', isError: true);
       return;
     }
 
@@ -58,9 +66,9 @@ class _ResetScreenState extends State<ResetScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
     final passwordConfirmation = _passwordConfirmController.text.trim();
-    final token = _tokenController.text.trim();
+    final otp = _otpController.text.trim();
 
-    final url = Uri.parse('$apiUrl/forgot');
+    final url = Uri.parse('$apiUrl/reset');
     final headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -68,7 +76,7 @@ class _ResetScreenState extends State<ResetScreen> {
 
     final body = jsonEncode({
       "email": email,
-      "token": token,
+      "otp": otp,
       "password": password,
       "password_confirmation": passwordConfirmation,
     });
@@ -127,6 +135,13 @@ class _ResetScreenState extends State<ResetScreen> {
             ),
             const SizedBox(height: 16),
             buildTextField(
+              'One Time Passcode',
+              _otpController,
+              isPassword: true,
+              isNumeric: true,
+            ),
+            const SizedBox(height: 16),
+            buildTextField(
               'New Password',
               _passwordController,
               isPassword: true,
@@ -137,10 +152,35 @@ class _ResetScreenState extends State<ResetScreen> {
               _passwordConfirmController,
               isPassword: true,
             ),
+            SizedBox(height: 16),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => SignInScreen()),
+                  );
+                },
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shadowColor: Colors.white,
+                  enableFeedback: false,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  surfaceTintColor: Colors.transparent,
+                  foregroundColor: Colors.transparent,
+                ),
+                child: Text(
+                  'Already have an account?',
+                  style: GoogleFonts.inter(color: Color(0xFF5E875E)),
+                ),
+              ),
+            ),
             const SizedBox(height: 16),
             buildGreenButton(
               _isLoading ? 'Resetting...' : 'Reset Password',
-              () {},
+              () async {
+                await resetPassword();
+              },
             ),
           ],
         ),
