@@ -128,7 +128,21 @@ class _ResetScreenState extends State<ResetScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              "Reset account",
+              style: GoogleFonts.inter(
+                color: Color(0xFF5E875E),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              'Start by providing your OTP and new password',
+              style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
+            ),
+            SizedBox(height: 20),
             buildTextField(
               'Email Address',
               _emailController,

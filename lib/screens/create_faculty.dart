@@ -70,9 +70,9 @@ class _CreateFacultyAccountScreenState
       body: jsonEncode({
         'name': name,
         'email': email,
+        'role': role,
         'password': password,
         'password_confirmation': confirmPassword,
-        'role': role,
       }),
     );
 
@@ -144,6 +144,14 @@ class _CreateFacultyAccountScreenState
                   MaterialPageRoute(builder: (context) => SignInScreen()),
                 );
               },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+                shadowColor: Colors.white,
+                enableFeedback: false,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                surfaceTintColor: Colors.transparent,
+                foregroundColor: Colors.transparent,
+              ),
               child: Text(
                 'Already have an account? Sign in',
                 style: GoogleFonts.inter(color: Color(0xFF5E875E)),
