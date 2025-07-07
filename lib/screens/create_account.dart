@@ -70,7 +70,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              "Create account",
+              style: GoogleFonts.inter(
+                color: Color(0xFF5E875E),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              'Start by creating your account',
+              style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
+            ),
             SizedBox(height: 20),
             buildTextField('Email Address', _emailController),
             SizedBox(height: 16),
@@ -83,11 +96,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               _confirmPasswordController,
               isPassword: true,
             ),
-            SizedBox(height: 40),
-            buildGreenButton('Create Account', () async {
-              await register();
-            }),
-            SizedBox(height: 20),
+            SizedBox(height: 16),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pushReplacement(
@@ -107,14 +116,21 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 style: GoogleFonts.inter(color: Color(0xFF5E875E)),
               ),
             ),
+            SizedBox(height: 16),
+            buildGreenButton('Create Account', () async {
+              await register();
+            }),
 
             SizedBox(height: 20),
-            Text(
-              'OR',
-              style: GoogleFonts.inter(
-                fontSize: 14,
-                color: Color(0xFF5E875E),
-                fontWeight: FontWeight.w600,
+            Center(
+              child: Text(
+                'OR',
+                style: GoogleFonts.inter(
+                  fontSize: 14,
+                  color: Color(0xFF5E875E),
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
             SizedBox(height: 20),

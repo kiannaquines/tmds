@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tdms_faculty/components/my_appbar.dart';
 import 'package:tdms_faculty/screens/signin.dart';
 import 'package:tdms_faculty/components/widgets.dart';
@@ -48,7 +49,6 @@ class _CreateFacultyAccountScreenState
         _roles = data.map<String>((item) => item['role'].toString()).toList();
       });
     } else {
-      // ignore: use_build_context_synchronously
       showMessageSnackbar(context, 'You have an empty roles, please add.');
     }
   }
@@ -81,18 +81,14 @@ class _CreateFacultyAccountScreenState
     if (response.statusCode == 201) {
       final message = responseData['message'];
 
-      // ignore: use_build_context_synchronously
       showMessageSnackbar(context, message, isError: false);
       await Future.delayed(Duration(milliseconds: 500));
 
-      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => SignInScreen()),
       );
     } else {
       final message = responseData['message'] ?? 'Registration failed';
-
-      // ignore: use_build_context_synchronously
       showMessageSnackbar(context, message);
     }
   }
@@ -107,7 +103,20 @@ class _CreateFacultyAccountScreenState
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              "Create account",
+              style: GoogleFonts.inter(
+                color: Color(0xFF5E875E),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              'Start by creating your faculty account',
+              style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
+            ),
             SizedBox(height: 20),
             buildTextField('Email Address', _emailController),
             SizedBox(height: 16),
@@ -128,11 +137,7 @@ class _CreateFacultyAccountScreenState
               _confirmPasswordController,
               isPassword: true,
             ),
-            SizedBox(height: 40),
-            buildGreenButton('Create Account', () async {
-              await registerFaculty();
-            }),
-            SizedBox(height: 20),
+            SizedBox(height: 16),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pushReplacement(
@@ -141,9 +146,13 @@ class _CreateFacultyAccountScreenState
               },
               child: Text(
                 'Already have an account? Sign in',
-                style: TextStyle(color: Color(0xFF5E875E)),
+                style: GoogleFonts.inter(color: Color(0xFF5E875E)),
               ),
             ),
+            SizedBox(height: 16),
+            buildGreenButton('Create Account', () async {
+              await registerFaculty();
+            }),
           ],
         ),
       ),

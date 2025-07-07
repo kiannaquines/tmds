@@ -70,7 +70,20 @@ class _SignInScreenState extends State<SignInScreen> {
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              "Login account",
+              style: GoogleFonts.inter(
+                color: Color(0xFF5E875E),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              'Start by authenticating your account',
+              style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
+            ),
             SizedBox(height: 20),
             buildTextField('Email Address', _emailController),
             SizedBox(height: 16),
@@ -118,10 +131,12 @@ class _SignInScreenState extends State<SignInScreen> {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 surfaceTintColor: Colors.transparent,
                 foregroundColor: Colors.transparent,
+                alignment: Alignment.center,
               ),
               child: Text(
                 "Don't have an account? Sign up",
                 style: GoogleFonts.inter(color: Color(0xFF5E875E)),
+                textAlign: TextAlign.center,
               ),
             ),
             SizedBox(height: 20),

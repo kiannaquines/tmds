@@ -88,7 +88,9 @@ class _ResetScreenState extends State<ResetScreen> {
       if (response.statusCode == 200) {
         if (mounted) {
           showMessageSnackbar(context, data['message'], isError: false);
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (context) => const SignInScreen()));
         }
       } else {
         if (mounted) {
