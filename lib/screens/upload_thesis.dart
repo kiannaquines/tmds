@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:tdms_faculty/components/my_appbar.dart';
 import 'package:tdms_faculty/components/widgets.dart';
+import 'package:tdms_faculty/constants.dart';
 import 'package:tdms_faculty/screens/dashboard.dart';
 
 class UploadThesisScreen extends StatefulWidget {
@@ -20,15 +24,45 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
   final _panelist3Controller = TextEditingController();
   final _yearController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    _fetchDepartment();
+    _fetchFaculty();
+    _fetchStudyType();
+  }
+
+  final List<String> departments = [];
+  List<String> _faculty = [];
+  final List<String> studyTypes = [];
+
+  Future<void> _fetchDepartment() async {}
+  Future<void> _fetchStudyType() async {}
+
+  Future<void> _fetchFaculty() async {
+    final url = Uri.parse('$apiUrl/faculty');
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+
+      setState(() {
+        _faculty = data.map<String>((item) => item['name'].toString()).toList();
+      });
+    } else {
+      showMessageSnackbar(context, 'Failed to fetch faculty list.');
+    }
+  }
+
   String? _selectedDepartment;
-  String? _selectedManuscript;
-
-  final List<String> departments = [
-    'Department of Accountancy',
-    'Department of Argribusiness',
-  ];
-
-  final List<String> manuscriptTypes = ['Manuscript', 'Outline'];
+  String? _selectedStudyType;
 
   @override
   Widget build(BuildContext context) {
@@ -51,26 +85,43 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Thesis Details',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
+              "Thesis Details",
+              style: GoogleFonts.inter(
                 color: Color(0xFF5E875E),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
+            Text(
+              'Fill out all of the inputs needed.',
+              style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
+            ),
             SizedBox(height: 20),
-            buildTextField('Thesis Title', _titleController),
+            buildTextField('Study Title', _titleController),
             SizedBox(height: 16),
             buildTextField('Author', _authorController),
             SizedBox(height: 16),
-            buildTextField('Advisor', _advisorController),
+            buildDropdown(
+              'Select Department',
+              _selectedDepartment,
+              departments,
+              (value) {
+                setState(() => _selectedDepartment = value);
+              },
+            ),
+            SizedBox(height: 16),
+            buildDropdown('Select Adviser', _selectedDepartment, departments, (
+              value,
+            ) {
+              setState(() => _selectedDepartment = value);
+            }),
             SizedBox(height: 16),
             Text(
               'Thesis Panel',
               style: GoogleFonts.inter(
-                fontWeight: FontWeight.w500,
                 color: Color(0xFF5E875E),
-                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
               ),
             ),
             Text(
@@ -82,13 +133,19 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
               ),
             ),
             SizedBox(height: 16),
-            buildTextField('Panelist 1', _panelist1Controller),
+            buildDropdown('Select Panel 1', _selectedDepartment, departments, (
+              value,
+            ) {
+              setState(() => _selectedDepartment = value);
+            }),
             SizedBox(height: 16),
-            buildTextField('Panelist 2', _panelist2Controller),
+            buildDropdown('Select Panel 2', _selectedDepartment, departments, (
+              value,
+            ) {
+              setState(() => _selectedDepartment = value);
+            }),
             SizedBox(height: 16),
-            buildTextField('Panelist 3', _panelist3Controller),
-            SizedBox(height: 16),
-            buildDropdown('Department', _selectedDepartment, departments, (
+            buildDropdown('Select Panel 3', _selectedDepartment, departments, (
               value,
             ) {
               setState(() => _selectedDepartment = value);
@@ -104,11 +161,11 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
                 Expanded(
                   flex: 1,
                   child: buildDropdown(
-                    'Manuscript',
-                    _selectedManuscript,
-                    manuscriptTypes,
+                    'Study',
+                    _selectedStudyType,
+                    studyTypes,
                     (value) {
-                      setState(() => _selectedManuscript = value);
+                      setState(() => _selectedStudyType = value);
                     },
                   ),
                 ),
@@ -148,7 +205,7 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
         _panelist3Controller.text.isNotEmpty &&
         _yearController.text.isNotEmpty &&
         _selectedDepartment != null &&
-        _selectedManuscript != null;
+        _selectedStudyType != null;
   }
 
   @override
