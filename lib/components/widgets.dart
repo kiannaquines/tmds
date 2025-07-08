@@ -132,7 +132,7 @@ Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
           ),
         ),
         IconButton(
-          icon: Icon(LucideIcons.ellipsisVertical, color: Color(0xFF5E875E)),
+          icon: Icon(LucideIcons.clipboard, color: Color(0xFF5E875E)),
           onPressed: onTap,
         ),
       ],

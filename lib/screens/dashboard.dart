@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:tdms_faculty/components/my_appbar.dart';
 import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/screens/my_submissions.dart';
+import 'package:tdms_faculty/screens/thesis_status.dart';
 import 'package:tdms_faculty/screens/upload_thesis.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -40,7 +41,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               'Submit Thesis Outline',
               'Submitted last week',
               () {
-                Navigator.pushNamed(context, '/thesis-status');
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => ThesisStatusScreen()),
+                );
               },
             ),
             SizedBox(height: 12),
@@ -48,7 +51,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               'Submitted Thesis Manuscript',
               'Submitted last month',
               () {
-                Navigator.pushNamed(context, '/thesis-status');
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => ThesisStatusScreen()),
+                );
               },
             ),
             SizedBox(height: 32),

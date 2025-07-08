@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tdms_faculty/components/my_appbar.dart';
 import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/constants.dart';
@@ -17,52 +18,158 @@ class UploadThesisScreen extends StatefulWidget {
 
 class _UploadThesisScreenState extends State<UploadThesisScreen> {
   final _titleController = TextEditingController();
-  final _authorController = TextEditingController();
-  final _advisorController = TextEditingController();
-  final _panelist1Controller = TextEditingController();
-  final _panelist2Controller = TextEditingController();
-  final _panelist3Controller = TextEditingController();
   final _yearController = TextEditingController();
+
+  String? _selectedDepartment;
+  String? _selectedPanel1;
+  String? _selectedPanel2;
+  String? _selectedPanel3;
+  String? _selectedStudyType;
+  String? _selectedAdviser;
 
   @override
   void initState() {
     super.initState();
-    _fetchDepartment();
     _fetchFaculty();
+    _fetchDepartment();
     _fetchStudyType();
+    _getToken();
   }
 
-  final List<String> departments = [];
-  List<String> _faculty = [];
-  final List<String> studyTypes = [];
+  List<String> departments = [];
+  List<String> faculty = [];
+  List<String> studyTypes = [];
 
-  Future<void> _fetchDepartment() async {}
-  Future<void> _fetchStudyType() async {}
+  Future<String?> _getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_token');
+  }
 
-  Future<void> _fetchFaculty() async {
-    final url = Uri.parse('$apiUrl/faculty');
-
+  Future<void> _fetchDepartment() async {
+    final url = Uri.parse('$apiUrl/department');
+    final token = await _getToken();
     final response = await http.get(
       url,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      setState(() {
+        departments =
+            data.map<String>((item) => item['name'].toString()).toList();
+      });
+    } else {
+      showMessageSnackbar(context, 'Failed to fetch department list.');
+    }
+  }
+
+  Future<void> _fetchStudyType() async {
+    final url = Uri.parse('$apiUrl/study');
+    final token = await _getToken();
+    final response = await http.get(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      setState(() {
+        studyTypes =
+            data.map<String>((item) => item['type'].toString()).toList();
+      });
+    } else {
+      showMessageSnackbar(context, 'Failed to fetch study type list.');
+    }
+  }
+
+  Future<void> _fetchFaculty() async {
+    final url = Uri.parse('$apiUrl/faculty');
+    final token = await _getToken();
+    final response = await http.get(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
       },
     );
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-
       setState(() {
-        _faculty = data.map<String>((item) => item['name'].toString()).toList();
+        faculty = data.map<String>((item) => item['name'].toString()).toList();
       });
     } else {
       showMessageSnackbar(context, 'Failed to fetch faculty list.');
     }
   }
 
-  String? _selectedDepartment;
-  String? _selectedStudyType;
+  Future<void> storeThesis() async {
+    final title = _titleController.text.trim();
+    final department = _selectedDepartment;
+    final adviser = _selectedAdviser;
+    final panel1 = _selectedPanel1;
+    final panel2 = _selectedPanel2;
+    final panel3 = _selectedPanel3;
+    final year = _yearController.text.trim();
+    final type = _selectedStudyType;
+
+    final body = jsonEncode({
+      "title": title,
+      "department": department,
+      "adviser": adviser,
+      "panel1": panel1,
+      "panel2": panel2,
+      "panel3": panel3,
+      "year": year,
+      "type": type,
+    });
+
+    debugPrint(body);
+
+    try {
+      final url = Uri.parse('$apiUrl/thesis');
+      final token = await _getToken();
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          if (token != null) 'Authorization': 'Bearer $token',
+        },
+        body: body,
+      );
+
+      final bodyMessage = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        showMessageSnackbar(context, bodyMessage['message'], isError: false);
+        _titleController.clear();
+        _yearController.clear();
+
+        setState(() {
+          _selectedDepartment = null;
+          _selectedAdviser = null;
+          _selectedPanel1 = null;
+          _selectedPanel2 = null;
+          _selectedPanel3 = null;
+          _selectedStudyType = null;
+        });
+      } else {
+        showMessageSnackbar(context, bodyMessage['message'], isError: true);
+      }
+    } catch (e) {
+      showMessageSnackbar(context, 'Something went wrong: $e', isError: true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +206,6 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
             SizedBox(height: 20),
             buildTextField('Study Title', _titleController),
             SizedBox(height: 16),
-            buildTextField('Author', _authorController),
-            SizedBox(height: 16),
             buildDropdown(
               'Select Department',
               _selectedDepartment,
@@ -110,10 +215,8 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
               },
             ),
             SizedBox(height: 16),
-            buildDropdown('Select Adviser', _selectedDepartment, departments, (
-              value,
-            ) {
-              setState(() => _selectedDepartment = value);
+            buildDropdown('Select Adviser', _selectedAdviser, faculty, (value) {
+              setState(() => _selectedAdviser = value);
             }),
             SizedBox(height: 16),
             Text(
@@ -133,29 +236,27 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
               ),
             ),
             SizedBox(height: 16),
-            buildDropdown('Select Panel 1', _selectedDepartment, departments, (
-              value,
-            ) {
-              setState(() => _selectedDepartment = value);
+            buildDropdown('Select Panel 1', _selectedPanel1, faculty, (value) {
+              setState(() => _selectedPanel1 = value);
             }),
             SizedBox(height: 16),
-            buildDropdown('Select Panel 2', _selectedDepartment, departments, (
-              value,
-            ) {
-              setState(() => _selectedDepartment = value);
+            buildDropdown('Select Panel 2', _selectedPanel2, faculty, (value) {
+              setState(() => _selectedPanel2 = value);
             }),
             SizedBox(height: 16),
-            buildDropdown('Select Panel 3', _selectedDepartment, departments, (
-              value,
-            ) {
-              setState(() => _selectedDepartment = value);
+            buildDropdown('Select Panel 3', _selectedPanel3, faculty, (value) {
+              setState(() => _selectedPanel3 = value);
             }),
             SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   flex: 1,
-                  child: buildTextField('Year', _yearController),
+                  child: buildTextField(
+                    'Year',
+                    _yearController,
+                    isNumeric: true,
+                  ),
                 ),
                 SizedBox(width: 16),
                 Expanded(
@@ -172,23 +273,8 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
               ],
             ),
             SizedBox(height: 40),
-            buildGreenButton('Submit Thesis', () {
-              if (_validateForm()) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Thesis submitted successfully!'),
-                    backgroundColor: Color(0xFF4CAF50),
-                  ),
-                );
-                Navigator.pop(context);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Please fill in all required fields'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
+            buildGreenButton('Submit Thesis', () async {
+              await storeThesis();
             }),
           ],
         ),
@@ -196,27 +282,9 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
     );
   }
 
-  bool _validateForm() {
-    return _titleController.text.isNotEmpty &&
-        _authorController.text.isNotEmpty &&
-        _advisorController.text.isNotEmpty &&
-        _panelist1Controller.text.isNotEmpty &&
-        _panelist2Controller.text.isNotEmpty &&
-        _panelist3Controller.text.isNotEmpty &&
-        _yearController.text.isNotEmpty &&
-        _selectedDepartment != null &&
-        _selectedStudyType != null;
-  }
-
   @override
   void dispose() {
     _titleController.dispose();
-    _authorController.dispose();
-    _advisorController.dispose();
-    _panelist1Controller.dispose();
-    _panelist2Controller.dispose();
-    _panelist3Controller.dispose();
-    _yearController.dispose();
     super.dispose();
   }
 }

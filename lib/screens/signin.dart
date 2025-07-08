@@ -27,36 +27,40 @@ class _SignInScreenState extends State<SignInScreen> {
 
     final url = Uri.parse('$apiUrl/login');
 
-    final response = await http.post(
-      url,
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({'email': email, 'password': password}),
-    );
-
-    final responseData = jsonDecode(response.body);
-
-    if (response.statusCode == 200) {
-      final token = responseData['access_token'];
-      final message = responseData['message'];
-
-      final prefs = await SharedPreferences.getInstance();
-
-      if (!prefs.containsKey('auth_token')) {
-        await prefs.setString('auth_token', token);
-      }
-
-      showMessageSnackbar(context, message, isError: false);
-      await Future.delayed(Duration(milliseconds: 500));
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => DashboardScreen()),
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'email': email, 'password': password}),
       );
-    } else {
-      final message = responseData['message'] ?? 'Login failed';
-      showMessageSnackbar(context, message);
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        final token = responseData['access_token'];
+        final message = responseData['message'];
+
+        final prefs = await SharedPreferences.getInstance();
+
+        if (!prefs.containsKey('auth_token')) {
+          await prefs.setString('auth_token', token);
+        }
+
+        showMessageSnackbar(context, message, isError: false);
+        await Future.delayed(Duration(milliseconds: 500));
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => DashboardScreen()),
+        );
+      } else {
+        final message = responseData['message'] ?? 'Login failed';
+        showMessageSnackbar(context, message);
+      }
+    } catch (e) {
+      showMessageSnackbar(context, '$e');
     }
   }
 
