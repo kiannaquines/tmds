@@ -96,6 +96,8 @@ Widget buildButton(String text, VoidCallback onPressed) {
 Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
   return SizedBox(
     child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           width: 48,
@@ -105,12 +107,13 @@ Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
             color: Color(0xFFE8F2E8),
             borderRadius: BorderRadius.circular(4),
           ),
-          child: Icon(LucideIcons.file, color: Color(0xFF5E875E), size: 24),
+          child: Icon(LucideIcons.library, color: Color(0xFF5E875E), size: 24),
         ),
         SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 title,
@@ -132,7 +135,7 @@ Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
           ),
         ),
         IconButton(
-          icon: Icon(LucideIcons.clipboard, color: Color(0xFF5E875E)),
+          icon: Icon(LucideIcons.ellipsisVertical, color: Color(0xFF5E875E)),
           onPressed: onTap,
         ),
       ],
