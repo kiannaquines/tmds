@@ -310,7 +310,7 @@ Widget buildTimelineItem({
                     Text(
                       title,
                       style: GoogleFonts.inter(
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: const Color(0xFF5E875E),
                       ),
@@ -319,7 +319,7 @@ Widget buildTimelineItem({
                       Text(
                         timeAgo,
                         style: GoogleFonts.inter(
-                          fontSize: 12,
+                          fontSize: 10,
                           color: Colors.grey.shade500,
                         ),
                       ),

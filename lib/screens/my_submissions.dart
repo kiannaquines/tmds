@@ -89,6 +89,7 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
             ),
             SizedBox(height: 16),
             ...mySubmissions.map((submission) {
+              final String id = submission['id'].toString();
               final String title = submission['title'] ?? '';
               final String type = submission['type'] ?? '';
               final String createdAt = submission['created_at'] ?? '';
@@ -101,7 +102,7 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
                 child: buildSubmissionCard('$type: $title', subtitle, () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => ThesisStatusScreen(),
+                      builder: (context) => ThesisStatusScreen(studyId: id),
                     ),
                   );
                 }),
