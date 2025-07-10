@@ -60,7 +60,7 @@ class _ThesisStatusScreenState extends State<ThesisStatusScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
+        preferredSize: const Size.fromHeight(50),
         child: MyAppbar(
           title: 'Thesis Status',
           showActions: false,
@@ -72,7 +72,7 @@ class _ThesisStatusScreenState extends State<ThesisStatusScreen> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -81,51 +81,70 @@ class _ThesisStatusScreenState extends State<ThesisStatusScreen> {
               style: GoogleFonts.inter(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF5E875E),
+                color: const Color(0xFF5E875E),
               ),
             ),
             Text(
               'Track the progress and status updates of your study here.',
-              style: GoogleFonts.inter(fontSize: 12, color: Color(0xFF5E875E)),
-            ),
-
-            SizedBox(height: 24),
-            Expanded(
-              child: ListView(
-                children: [
-                  ...studyTimeLine.asMap().entries.map((entry) {
-                    final int index = entry.key;
-                    final timeline = entry.value;
-
-                    final String comment = timeline['comment'] ?? '';
-                    final String checkBy = timeline['check_by'] ?? '';
-                    final String createdAt = timeline['created_at'] ?? '';
-
-                    DateTime createdDate =
-                        DateTime.tryParse(createdAt) ?? DateTime.now();
-                    String timeAgo = timeago.format(createdDate);
-
-                    return Padding(
-                      padding: EdgeInsets.only(top: index == 0 ? 0.0 : 12.0),
-                      child: buildTimelineItem(
-                        title: checkBy,
-                        subtitle: comment,
-                        timeAgo: timeAgo,
-                      ),
-                    );
-                  }),
-                ],
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                color: const Color(0xFF5E875E),
               ),
             ),
-            SizedBox(height: 20),
-            buildGreenButton(
-              'Back to Home',
-              () => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => DashboardScreen()),
+            const SizedBox(height: 24),
+            if (studyTimeLine.isNotEmpty)
+              Expanded(
+                child: ListView(
+                  children:
+                      studyTimeLine.asMap().entries.map((entry) {
+                        final int index = entry.key;
+                        final timeline = entry.value;
+
+                        final String comment = timeline['comment'] ?? '';
+                        final String checkBy = timeline['check_by'] ?? '';
+                        final String createdAt = timeline['created_at'] ?? '';
+
+                        DateTime createdDate =
+                            DateTime.tryParse(createdAt) ?? DateTime.now();
+                        String timeAgo = timeago.format(createdDate);
+
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            top: index == 0 ? 0.0 : 12.0,
+                          ),
+                          child: buildTimelineItem(
+                            title: checkBy,
+                            subtitle: comment,
+                            timeAgo: timeAgo,
+                          ),
+                        );
+                      }).toList(),
+                ),
               ),
-            ),
+            if (studyTimeLine.isEmpty)
+              Container(
+                color: const Color(0xFFE8F2E8),
+                padding: const EdgeInsets.all(12.0),
+                width: double.infinity,
+                child: Text(
+                  'Oops! No progress has been recorded for this study yet.',
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    color: const Color(0xFF5E875E),
+                  ),
+                ),
+              ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: buildGreenButton(
+          'Back to Home',
+          () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => DashboardScreen()),
+          ),
         ),
       ),
     );
