@@ -144,12 +144,15 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
             ),
             SizedBox(height: 20),
-            Text(
-              'By using our application you agree to our Terms of Service and Privacy Policy.',
-              style: GoogleFonts.inter(fontSize: 12, color: Color(0xFF5E875E)),
-              textAlign: TextAlign.center,
-            ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 12.0),
+        child: Text(
+          'By using our application you agree to our Terms of Service and Privacy Policy.',
+          style: GoogleFonts.inter(fontSize: 12, color: Color(0xFF5E875E)),
+          textAlign: TextAlign.center,
         ),
       ),
     );
