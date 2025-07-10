@@ -3,8 +3,23 @@ import 'package:tdms_faculty/components/my_appbar.dart';
 import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/screens/dashboard.dart';
 
-class ThesisStatusScreen extends StatelessWidget {
+class ThesisStatusScreen extends StatefulWidget {
   const ThesisStatusScreen({super.key});
+
+  @override
+  State<ThesisStatusScreen> createState() => _ThesisStatusScreenState();
+}
+
+class _ThesisStatusScreenState extends State<ThesisStatusScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _fetchStudyTimeLine();
+  }
+
+  List<Map<String, dynamic>> studyTimeLine = [];
+
+  Future<void> _fetchStudyTimeLine() async {}
 
   @override
   Widget build(BuildContext context) {

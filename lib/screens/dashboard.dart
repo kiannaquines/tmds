@@ -63,7 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _fetchNotification() async {
-    final url = Uri.parse('$apiUrl/notifications');
+    final url = Uri.parse('$apiUrl/notification');
     final token = await _getToken();
 
     final response = await http.get(
@@ -100,12 +100,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'My Submission',
+              'My Submissions',
               style: GoogleFonts.inter(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF5E875E),
               ),
+            ),
+            Text(
+              'All your submitted works will appear here.',
+              style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
             ),
             SizedBox(height: 16),
             ...mySubmissions.map((submission) {
@@ -126,12 +130,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   );
                 }),
               );
-            }).toList(),
+            }),
 
             if (mySubmissions.isEmpty)
-              Text(
-                'No submissions yet.',
-                style: GoogleFonts.inter(fontSize: 16, color: Colors.grey),
+              Container(
+                color: Color(0xFFE8F2E8),
+                padding: EdgeInsets.all(12.0),
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  'Oppss, No submissions yet...',
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    color: Color(0xFF5E875E),
+                  ),
+                ),
               ),
             SizedBox(height: 32),
             Text(
@@ -142,41 +154,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 color: Color(0xFF5E875E),
               ),
             ),
+            Text(
+              'Stay updated with your latest notifications here.',
+              style: GoogleFonts.inter(fontSize: 12, color: Color(0xFF5E875E)),
+            ),
             SizedBox(height: 16),
-            buildNotificationCard(
-              'Approved by Elizabeth',
-              'Your document has been approved',
-            ),
-            SizedBox(height: 12),
-            buildNotificationCard(
-              'Approved by Nor-aine',
-              'Your document has been approved',
-            ),
-            SizedBox(height: 12),
-            buildNotificationCard(
-              'Approved by Ralph',
-              'Your document has been approved',
-            ),
-            SizedBox(height: 12),
-            buildNotificationCard(
-              'Approved by Ryan',
-              'Your document has been approved',
-            ),
-            SizedBox(height: 12),
-            buildNotificationCard(
-              'Approved by Catherine',
-              'Your document has been approved',
-            ),
-            SizedBox(height: 12),
-            buildNotificationCard(
-              'Approved by Sherly',
-              'Your document has been approved',
-            ),
-            SizedBox(height: 12),
-            buildNotificationCard(
-              'Ready for RDO',
-              'Ready your document for RDO',
-            ),
+            ...myNotification.asMap().entries.map((entry) {
+              final int index = entry.key;
+              final notification = entry.value;
+
+              final String status = notification['status'] ?? '';
+              final String comment = notification['comment'] ?? '';
+              final String studyType = notification['study_type'] ?? '';
+              final String title = notification['study_title'] ?? '';
+
+              return Padding(
+                padding: EdgeInsets.only(top: index == 0 ? 0.0 : 12.0),
+                child: buildNotificationCard(
+                  '$studyType - $title ($status)',
+                  comment,
+                ),
+              );
+            }),
+
+            if (myNotification.isEmpty)
+              Container(
+                color: Color(0xFFE8F2E8),
+                padding: EdgeInsets.all(12.0),
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  'Oppss, No notification yet...',
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    color: Color(0xFF5E875E),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

@@ -146,6 +146,8 @@ Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
 Widget buildNotificationCard(String title, String subtitle) {
   return SizedBox(
     child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           width: 48,
@@ -161,6 +163,7 @@ Widget buildNotificationCard(String title, String subtitle) {
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 title,
@@ -177,6 +180,10 @@ Widget buildNotificationCard(String title, String subtitle) {
                   color: Color(0xFF5E875E),
                   fontSize: 10,
                 ),
+              ),
+              Text(
+                '~ Elizabeth R. Genotiva',
+                style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 8),
               ),
             ],
           ),
@@ -347,6 +354,7 @@ void showMessageSnackbar(
         isError ? const Color(0xFFD32F2F) : const Color(0xFF5E875E),
     behavior: SnackBarBehavior.floating,
     margin: const EdgeInsets.all(16),
+    showCloseIcon: true,
     duration: const Duration(seconds: 3),
   );
 

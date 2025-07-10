@@ -76,16 +76,20 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'My Submission',
+              'My Submissions',
               style: GoogleFonts.inter(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF5E875E),
               ),
             ),
+            Text(
+              'All your submitted works will appear here.',
+              style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
+            ),
             SizedBox(height: 16),
             ...mySubmissions.map((submission) {
-              final String title = submission['title'] ?? 'Untitled Thesis';
+              final String title = submission['title'] ?? '';
               final String type = submission['type'] ?? '';
               final String createdAt = submission['created_at'] ?? '';
 
@@ -102,12 +106,20 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
                   );
                 }),
               );
-            }).toList(),
+            }),
 
             if (mySubmissions.isEmpty)
-              Text(
-                'No submissions yet.',
-                style: GoogleFonts.inter(fontSize: 16, color: Colors.grey),
+              Container(
+                color: Color(0xFFE8F2E8),
+                padding: EdgeInsets.all(12.0),
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  'Oppss, No submissions yet...',
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    color: Color(0xFF5E875E),
+                  ),
+                ),
               ),
           ],
         ),
