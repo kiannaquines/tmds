@@ -360,3 +360,53 @@ void showMessageSnackbar(
 
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
+
+Widget buildUserCard(String title, String subtitle, VoidCallback onTap) {
+  return SizedBox(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 48,
+          height: 48,
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Color(0xFFE8F2E8),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Icon(LucideIcons.users, color: Color(0xFF5E875E), size: 24),
+        ),
+        SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF5E875E),
+                  fontSize: 15,
+                ),
+              ),
+              SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: GoogleFonts.inter(
+                  color: Color(0xFF5E875E),
+                  fontSize: 10,
+                ),
+              ),
+            ],
+          ),
+        ),
+        IconButton(
+          icon: Icon(LucideIcons.ellipsisVertical, color: Color(0xFF5E875E)),
+          onPressed: onTap,
+        ),
+      ],
+    ),
+  );
+}
