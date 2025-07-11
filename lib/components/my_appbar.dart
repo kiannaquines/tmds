@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:tdms_faculty/constants.dart';
 import 'package:tdms_faculty/screens/signin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tdms_faculty/components/widgets.dart';
@@ -23,6 +27,43 @@ class MyAppbar extends StatefulWidget {
 }
 
 class _MyAppbarState extends State<MyAppbar> {
+  Future<String?> _getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_token');
+  }
+
+  Future<void> logout() async {
+    final url = Uri.parse('$apiUrl/logout');
+    final token = await _getToken();
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+      final String message = responseBody['message'] ?? 'Logout successful.';
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('auth_token');
+      await prefs.remove('role');
+
+      if (context.mounted) {
+        showMessageSnackbar(context, message, isError: false);
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const SignInScreen()),
+        );
+      }
+    } else {
+      showMessageSnackbar(context, 'Failed to log out. Please try again.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -53,20 +94,7 @@ class _MyAppbarState extends State<MyAppbar> {
                 IconButton(
                   icon: Icon(LucideIcons.logOut, color: Color(0xFF5E875E)),
                   onPressed: () async {
-                    final prefs = await SharedPreferences.getInstance();
-                    await prefs.remove('auth_token');
-
-                    showMessageSnackbar(
-                      context,
-                      'You have been logout.',
-                      isError: false,
-                    );
-
-                    if (context.mounted) {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => SignInScreen()),
-                      );
-                    }
+                    await logout();
                   },
                 ),
               ]

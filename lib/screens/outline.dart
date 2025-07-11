@@ -1,40 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tdms_faculty/components/my_appbar.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:tdms_faculty/components/widgets.dart';
-import 'package:tdms_faculty/screens/manuscript.dart';
-import 'package:tdms_faculty/screens/outline.dart';
+import 'package:tdms_faculty/screens/faculty_dashboard.dart';
 
-class FacultyDashboardScreen extends StatefulWidget {
-  const FacultyDashboardScreen({super.key});
+class OutlineScreen extends StatefulWidget {
+  const OutlineScreen({super.key});
 
   @override
-  State<FacultyDashboardScreen> createState() => _FacultyDashboardScreenState();
+  State<OutlineScreen> createState() => _OutlineScreenState();
 }
 
-class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
-  int _selectedIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchToCheckPaper();
-    _fetchCheckedPaper();
-  }
-
-  List<Map<String, dynamic>> toCheckPapers = [];
-  List<Map<String, dynamic>> checkedPaper = [];
-
-  Future<void> _fetchToCheckPaper() async {}
-  Future<void> _fetchCheckedPaper() async {}
-
+class _OutlineScreenState extends State<OutlineScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
-        child: MyAppbar(title: 'Faculty Dashboard', showActions: true),
+        child: MyAppbar(
+          title: 'Outline',
+          showActions: true,
+          withLeading: true,
+          locationScreen: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => FacultyDashboardScreen()),
+            );
+          },
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -42,7 +34,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'New Arrived Paper',
+              'Outline Papers',
               style: GoogleFonts.inter(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
@@ -50,7 +42,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
               ),
             ),
             Text(
-              'All newly submitted papers pending your review will appear here.',
+              'All newly submitted outlines awaiting your review will appear here.',
               style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
             ),
             SizedBox(height: 16),
@@ -145,54 +137,6 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          if (_selectedIndex == index) return;
-
-          setState(() {
-            _selectedIndex = index;
-          });
-
-          switch (index) {
-            case 0:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => OutlineScreen()),
-              );
-              break;
-            case 1:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => ManuscriptScreen()),
-              );
-              break;
-            case 2:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => OutlineScreen()),
-              );
-              break;
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Color(0xFF5E875E),
-        unselectedItemColor: Color(0xFF5E875E),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(LucideIcons.house),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(LucideIcons.file),
-            label: 'Manuscript',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(LucideIcons.file),
-            label: 'Outline',
-          ),
-        ],
       ),
     );
   }

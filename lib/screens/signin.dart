@@ -8,6 +8,7 @@ import 'package:tdms_faculty/screens/dashboard.dart';
 import 'package:http/http.dart' as http;
 import 'package:tdms_faculty/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tdms_faculty/screens/faculty_dashboard.dart';
 import 'package:tdms_faculty/screens/forgot.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -42,19 +43,27 @@ class _SignInScreenState extends State<SignInScreen> {
       if (response.statusCode == 200) {
         final token = responseData['access_token'];
         final message = responseData['message'];
-
+        final role = responseData['role'];
+        debugPrint(responseData.toString());
         final prefs = await SharedPreferences.getInstance();
 
-        if (!prefs.containsKey('auth_token')) {
+        if (!prefs.containsKey('auth_token') && !prefs.containsKey('role')) {
           await prefs.setString('auth_token', token);
+          await prefs.setString('role', role);
         }
 
         showMessageSnackbar(context, message, isError: false);
         await Future.delayed(Duration(milliseconds: 500));
 
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => DashboardScreen()),
-        );
+        if (role == "Student") {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => DashboardScreen()),
+          );
+        } else {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => FacultyDashboardScreen()),
+          );
+        }
       } else {
         final message = responseData['message'] ?? 'Login failed';
         showMessageSnackbar(context, message);
