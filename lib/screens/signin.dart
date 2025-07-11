@@ -44,7 +44,7 @@ class _SignInScreenState extends State<SignInScreen> {
         final token = responseData['access_token'];
         final message = responseData['message'];
         final role = responseData['role'];
-        debugPrint(responseData.toString());
+
         final prefs = await SharedPreferences.getInstance();
 
         if (!prefs.containsKey('auth_token') && !prefs.containsKey('role')) {

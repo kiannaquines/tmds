@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tdms_faculty/screens/dashboard.dart';
+import 'package:tdms_faculty/screens/faculty_dashboard.dart';
 import 'package:tdms_faculty/screens/signin.dart';
 
 class AuthGate extends StatefulWidget {
@@ -13,6 +14,7 @@ class AuthGate extends StatefulWidget {
 class _AuthGateState extends State<AuthGate> {
   bool _isReady = false;
   bool _isLoggedIn = false;
+  String _role = '';
 
   @override
   void initState() {
@@ -22,14 +24,40 @@ class _AuthGateState extends State<AuthGate> {
 
   Future<void> _initializeApp() async {
     final prefs = await SharedPreferences.getInstance();
-    final hasToken =
-        prefs.containsKey('auth_token') &&
-        (prefs.getString('auth_token')?.isNotEmpty ?? false);
+    final token = prefs.getString('auth_token');
+    final role = prefs.getString('role');
 
     setState(() {
-      _isLoggedIn = hasToken;
+      _isLoggedIn = token != null && token.isNotEmpty;
+      _role = role ?? '';
       _isReady = true;
     });
+  }
+
+  Widget _getRedirectScreen() {
+    if (!_isLoggedIn) return const SignInScreen();
+
+    switch (_role) {
+      case 'Student':
+        return const DashboardScreen();
+
+      case 'Faculty':
+      case 'Department Research Coordinator':
+      case 'Department Chairperson':
+      case 'College Research Coordinator':
+      case 'College Dean':
+        return const FacultyDashboardScreen();
+
+      default:
+        return const Scaffold(
+          body: Center(
+            child: Text(
+              'Unknown role. Please contact support.',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        );
+    }
   }
 
   @override
@@ -42,6 +70,6 @@ class _AuthGateState extends State<AuthGate> {
       );
     }
 
-    return _isLoggedIn ? const DashboardScreen() : const SignInScreen();
+    return _getRedirectScreen();
   }
 }

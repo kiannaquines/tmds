@@ -88,10 +88,6 @@ class _MyAppbarState extends State<MyAppbar> {
           (widget.showActions)
               ? [
                 IconButton(
-                  icon: Icon(LucideIcons.refreshCcw, color: Color(0xFF5E875E)),
-                  onPressed: () {},
-                ),
-                IconButton(
                   icon: Icon(LucideIcons.logOut, color: Color(0xFF5E875E)),
                   onPressed: () async {
                     await logout();

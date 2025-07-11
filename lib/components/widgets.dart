@@ -135,7 +135,7 @@ Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
           ),
         ),
         IconButton(
-          icon: Icon(LucideIcons.ellipsisVertical, color: Color(0xFF5E875E)),
+          icon: Icon(LucideIcons.arrowRight, color: Color(0xFF5E875E)),
           onPressed: onTap,
         ),
       ],
@@ -361,7 +361,12 @@ void showMessageSnackbar(
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
-Widget buildUserCard(String title, String subtitle, VoidCallback onTap) {
+Widget buildUserCard(
+  String title,
+  String subtitle,
+  String data,
+  VoidCallback onTap,
+) {
   return SizedBox(
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -399,11 +404,18 @@ Widget buildUserCard(String title, String subtitle, VoidCallback onTap) {
                   fontSize: 10,
                 ),
               ),
+              Text(
+                data,
+                style: GoogleFonts.inter(
+                  color: Color(0xFF5E875E),
+                  fontSize: 10,
+                ),
+              ),
             ],
           ),
         ),
         IconButton(
-          icon: Icon(LucideIcons.ellipsisVertical, color: Color(0xFF5E875E)),
+          icon: Icon(LucideIcons.arrowRight, color: Color(0xFF5E875E)),
           onPressed: onTap,
         ),
       ],

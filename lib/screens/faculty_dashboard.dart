@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tdms_faculty/components/my_appbar.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/screens/advisee.dart';
 import 'package:tdms_faculty/screens/manuscript.dart';
 import 'package:tdms_faculty/screens/outline.dart';
+import 'package:tdms_faculty/components/utils.dart';
 
 class FacultyDashboardScreen extends StatefulWidget {
   const FacultyDashboardScreen({super.key});
@@ -16,19 +18,29 @@ class FacultyDashboardScreen extends StatefulWidget {
 
 class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
   int _selectedIndex = 0;
+  String? userName;
+  String? userRole;
 
   @override
   void initState() {
     super.initState();
-    _fetchToCheckPaper();
-    _fetchCheckedPaper();
+    _loadUserName();
+    _loadUserRole();
   }
 
-  List<Map<String, dynamic>> toCheckPapers = [];
-  List<Map<String, dynamic>> checkedPaper = [];
+  Future<void> _loadUserName() async {
+    final name = await fetchUserName();
+    setState(() {
+      userName = name;
+    });
+  }
 
-  Future<void> _fetchToCheckPaper() async {}
-  Future<void> _fetchCheckedPaper() async {}
+  Future<void> _loadUserRole() async {
+    final role = await fetchUserRole();
+    setState(() {
+      userRole = role;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,20 +54,44 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Hi! Catherine Daffon,',
-              style: GoogleFonts.inter(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF5E875E),
+            Container(
+              padding: const EdgeInsets.all(16),
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE8F5E9), // Light green background
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Hi! ${userName ?? 'Guest'},',
+                    style: GoogleFonts.inter(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF5E875E),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    userRole ?? 'Professor',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFF5E875E),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Text(
-              'Department Research Coordinator.',
-              style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
-            ),
-            Divider(color: Color(0xFF5E875E), thickness: 1, endIndent: 16),
-            SizedBox(height: 16),
             Text(
               'New Arrived Paper',
               style: GoogleFonts.inter(
