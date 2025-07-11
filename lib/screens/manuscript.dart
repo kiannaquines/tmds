@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:tdms_faculty/components/my_appbar.dart';
+import 'package:tdms_faculty/components/utils.dart';
 import 'package:tdms_faculty/components/widgets.dart';
+import 'package:tdms_faculty/constants.dart';
 import 'package:tdms_faculty/screens/faculty_dashboard.dart';
 
 class ManuscriptScreen extends StatefulWidget {
@@ -12,6 +17,39 @@ class ManuscriptScreen extends StatefulWidget {
 }
 
 class _ManuscriptScreenState extends State<ManuscriptScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _fetchManuscript();
+  }
+
+  List<Map<String, dynamic>> manuscript = [];
+
+  Future<void> _fetchManuscript() async {
+    final url = Uri.parse('$apiUrl/academic/guidance/thesis/manuscript');
+    final token = await getToken();
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      final List<dynamic> data = responseBody['data'];
+
+      setState(() {
+        manuscript = data.cast<Map<String, dynamic>>();
+      });
+    } else {
+      showMessageSnackbar(context, 'Failed to fetch studies submissions.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,95 +84,16 @@ class _ManuscriptScreenState extends State<ManuscriptScreen> {
               style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
             ),
             SizedBox(height: 16),
-            buildSubmissionCard(
-              'Crowd Monitoring System...',
-              'Submitted this day',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Thesis Management...',
-              'Submitted this day',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Financial Management...',
-              'Submitted this day',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Feed Formulation System',
-              'Submitted this day',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Library Management System',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
+            ...manuscript.asMap().entries.map((entry) {
+              return Padding(
+                padding: EdgeInsets.only(top: 16.0),
+                child: buildSubmissionCard(
+                  'Equipment Management...',
+                  'Submitted this week',
+                  () {},
+                ),
+              );
+            }),
           ],
         ),
       ),

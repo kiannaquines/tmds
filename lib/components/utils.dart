@@ -3,14 +3,14 @@ import 'package:tdms_faculty/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-Future<String?> _getToken() async {
+Future<String?> getToken() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getString('auth_token');
 }
 
 Future<String?> fetchUserName() async {
   final url = Uri.parse('$apiUrl/user');
-  final token = await _getToken();
+  final token = await getToken();
 
   final response = await http.post(
     url,
@@ -31,7 +31,7 @@ Future<String?> fetchUserName() async {
 
 Future<String?> fetchUserRole() async {
   final url = Uri.parse('$apiUrl/user');
-  final token = await _getToken();
+  final token = await getToken();
 
   final response = await http.post(
     url,

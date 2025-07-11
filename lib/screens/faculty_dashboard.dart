@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import 'package:tdms_faculty/components/my_appbar.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:tdms_faculty/components/widgets.dart';
+import 'package:tdms_faculty/constants.dart';
 import 'package:tdms_faculty/screens/advisee.dart';
 import 'package:tdms_faculty/screens/manuscript.dart';
 import 'package:tdms_faculty/screens/outline.dart';
@@ -26,6 +29,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
     super.initState();
     _loadUserName();
     _loadUserRole();
+    _fetchStudiesBelongToMe();
   }
 
   Future<void> _loadUserName() async {
@@ -42,6 +46,33 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
     });
   }
 
+  List<Map<String, dynamic>> studiesBelongsToMe = [];
+
+  Future<void> _fetchStudiesBelongToMe() async {
+    final url = Uri.parse('$apiUrl/academic/guidance/thesis');
+    final token = await getToken();
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      final List<dynamic> data = responseBody['data'];
+
+      setState(() {
+        studiesBelongsToMe = data.cast<Map<String, dynamic>>();
+      });
+    } else {
+      showMessageSnackbar(context, 'Failed to fetch studies submissions.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +87,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
           children: [
             Container(
               padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.only(bottom: 16),
+              margin: const EdgeInsets.only(bottom: 13),
               decoration: BoxDecoration(
                 color: const Color(0xFFE8F5E9), // Light green background
                 borderRadius: BorderRadius.circular(12),
@@ -105,95 +136,19 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
               style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
             ),
             SizedBox(height: 16),
-            buildSubmissionCard(
-              'Crowd Monitoring System...',
-              'Submitted this day',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Thesis Management...',
-              'Submitted this day',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Financial Management...',
-              'Submitted this day',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Feed Formulation System',
-              'Submitted this day',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Library Management System',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
-            SizedBox(height: 12),
-            buildSubmissionCard(
-              'Equipment Management...',
-              'Submitted this week',
-              () {},
-            ),
+            ...studiesBelongsToMe.asMap().entries.map((entry) {
+              final index = entry.key;
+              final study = entry.value;
+              final title = study['title'];
+              final department = study['department'];
+              final type = study['type'];
+
+              final subtitle = '$department - $type';
+              return Padding(
+                padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
+                child: buildSubmissionCard(title, subtitle, () {}),
+              );
+            }),
           ],
         ),
       ),

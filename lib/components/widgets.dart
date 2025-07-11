@@ -117,6 +117,8 @@ Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
             children: [
               Text(
                 title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w500,
                   color: Color(0xFF5E875E),
