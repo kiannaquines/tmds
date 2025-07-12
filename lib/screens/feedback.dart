@@ -1,24 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:tdms_faculty/components/my_appbar.dart';
+import 'package:tdms_faculty/components/widgets.dart';
 
 class FeedbackScreen extends StatefulWidget {
-  const FeedbackScreen({super.key});
+  const FeedbackScreen({super.key, required this.studyId});
 
+  final int studyId;
   @override
   State<FeedbackScreen> createState() => _FeedbackScreenState();
 }
 
 class _FeedbackScreenState extends State<FeedbackScreen> {
   final _feedbackController = TextEditingController();
+  String? _selectedStatus;
+
+  final List<String> _status = ['Revise', 'Approved'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(50.0),
+        child: MyAppbar(
+          title: 'Evaluation',
+          showActions: true,
+          withLeading: true,
+          locationScreen: () {
+            Navigator.of(context).pop();
+          },
         ),
-        title: Text('Feedback'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -26,11 +37,24 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Document',
+              'Evaluate Thesis',
+              style: GoogleFonts.inter(
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF5E875E),
+              ),
+            ),
+            Text(
+              'Evaluate thesis here.',
+              style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
+            ),
+            SizedBox(height: 16),
+            Text(
+              'Thesis',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF4CAF50),
+                color: Color(0xFF5E875E),
               ),
             ),
             SizedBox(height: 16),
@@ -52,10 +76,14 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   Container(
                     padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Color(0xFFE8E8E8),
+                      color: Color(0xFFE8F2E8),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: Icon(Icons.description, color: Colors.grey[600]),
+                    child: Icon(
+                      Icons.description,
+                      color: Color(0xFF5E875E),
+                      size: 24.0,
+                    ),
                   ),
                   SizedBox(width: 16),
                   Expanded(
@@ -64,8 +92,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       children: [
                         Text(
                           'Crowd Monitoring System',
-                          style: TextStyle(
+                          style: GoogleFonts.inter(
                             fontWeight: FontWeight.w600,
+                            color: Color(0xFF5E875E),
                             fontSize: 16,
                           ),
                         ),
@@ -73,7 +102,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         Text(
                           'Submitted on 12/12/2023',
                           style: TextStyle(
-                            color: Color(0xFF4CAF50),
+                            color: Color(0xFF5E875E),
                             fontSize: 14,
                           ),
                         ),
@@ -85,59 +114,30 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             ),
             SizedBox(height: 32),
             Text(
-              'Feedback',
+              'Evaluation Comment',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF4CAF50),
+                color: Color(0xFF5E875E),
               ),
             ),
             SizedBox(height: 16),
             Expanded(
-              child: Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Color(0xFFE8E8E8),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextField(
-                  controller: _feedbackController,
-                  maxLines: null,
-                  expands: true,
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'Enter your feedback here...',
-                    hintStyle: TextStyle(color: Colors.grey[600]),
-                  ),
-                ),
+              child: buildTextField(
+                'Enter evaluation comment here...',
+                _feedbackController,
               ),
             ),
+            SizedBox(height: 16),
+            buildDropdown('Status', _selectedStatus, _status, (
+              String? newValue,
+            ) {
+              setState(() {
+                _selectedStatus = newValue;
+              });
+            }),
             SizedBox(height: 32),
-            Container(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Feedback submitted successfully!')),
-                  );
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF4CAF50),
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Text(
-                  'Submit Feedback',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
+            buildGreenButton('Submit Evaluation', () {}),
           ],
         ),
       ),

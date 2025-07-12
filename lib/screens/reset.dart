@@ -148,6 +148,7 @@ class _ResetScreenState extends State<ResetScreen> {
               _emailController,
               isPassword: false,
               readOnly: true,
+              maxLines: 1,
             ),
             const SizedBox(height: 16),
             buildTextField(
@@ -155,18 +156,21 @@ class _ResetScreenState extends State<ResetScreen> {
               _otpController,
               isPassword: true,
               isNumeric: true,
+              maxLines: 1,
             ),
             const SizedBox(height: 16),
             buildTextField(
               'New Password',
               _passwordController,
               isPassword: true,
+              maxLines: 1,
             ),
             const SizedBox(height: 16),
             buildTextField(
               'Confirm New Password',
               _passwordConfirmController,
               isPassword: true,
+              maxLines: 1,
             ),
             SizedBox(height: 16),
             Align(

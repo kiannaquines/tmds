@@ -118,9 +118,9 @@ class _CreateFacultyAccountScreenState
               style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
             ),
             SizedBox(height: 20),
-            buildTextField('Email Address', _emailController),
+            buildTextField('Email Address', _emailController, maxLines: 1),
             SizedBox(height: 16),
-            buildTextField('Fullname', _fullnameController),
+            buildTextField('Fullname', _fullnameController, maxLines: 1),
             SizedBox(height: 16),
             buildDropdown('Select Role', _selectedRole, _roles, (
               String? newValue,
@@ -130,11 +130,17 @@ class _CreateFacultyAccountScreenState
               });
             }),
             SizedBox(height: 16),
-            buildTextField('Password', _passwordController, isPassword: true),
+            buildTextField(
+              'Password',
+              _passwordController,
+              maxLines: 1,
+              isPassword: true,
+            ),
             SizedBox(height: 16),
             buildTextField(
               'Confirm Password',
               _confirmPasswordController,
+              maxLines: 1,
               isPassword: true,
             ),
             SizedBox(height: 16),

@@ -8,6 +8,7 @@ Widget buildTextField(
   bool isPassword = false,
   bool readOnly = false,
   bool isNumeric = false,
+  int maxLines = 5,
 }) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -24,6 +25,7 @@ Widget buildTextField(
     ),
     child: TextField(
       keyboardType: isNumeric ? TextInputType.phone : TextInputType.text,
+      maxLines: maxLines,
       readOnly: readOnly,
       cursorColor: Color(0xFF5E875E),
       controller: controller,
@@ -202,7 +204,7 @@ Widget buildDropdown(
   Function(String?) onChanged,
 ) {
   return Container(
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 7),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(12),

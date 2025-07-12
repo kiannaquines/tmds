@@ -86,7 +86,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
               style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
             ),
             SizedBox(height: 16),
-            buildTextField('Email Address', _emailController),
+            buildTextField('Email Address', _emailController, maxLines: 1),
             SizedBox(height: 16),
             Align(
               alignment: Alignment.centerLeft,

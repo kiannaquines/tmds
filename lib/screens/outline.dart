@@ -8,6 +8,7 @@ import 'package:tdms_faculty/components/utils.dart';
 import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/constants.dart';
 import 'package:tdms_faculty/screens/faculty_dashboard.dart';
+import 'package:tdms_faculty/screens/feedback.dart';
 
 class OutlineScreen extends StatefulWidget {
   const OutlineScreen({super.key});
@@ -109,12 +110,15 @@ class _OutlineScreenState extends State<OutlineScreen> {
                         ),
                         content: Text(
                           'Are you sure you want to evaluate this study?',
-                          style: GoogleFonts.inter(fontSize: 13.0),
+                          style: GoogleFonts.inter(
+                            color: Color(0xFF5E875E),
+                            fontSize: 13,
+                          ),
                         ),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pop(); // Close dialog
+                              Navigator.of(context).pop();
                             },
                             child: Text(
                               'Cancel',
@@ -125,7 +129,13 @@ class _OutlineScreenState extends State<OutlineScreen> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) =>
+                                          const FeedbackScreen(studyId: 1),
+                                ),
+                              );
                             },
                             style: ButtonStyle(
                               foregroundColor: MaterialStateProperty.all(

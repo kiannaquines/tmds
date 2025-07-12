@@ -204,7 +204,7 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
               style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
             ),
             SizedBox(height: 20),
-            buildTextField('Study Title', _titleController),
+            buildTextField('Study Title', _titleController, maxLines: 2),
             SizedBox(height: 16),
             buildDropdown(
               'Select Department',
@@ -256,6 +256,7 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
                     'Year',
                     _yearController,
                     isNumeric: true,
+                    maxLines: 1,
                   ),
                 ),
                 SizedBox(width: 16),

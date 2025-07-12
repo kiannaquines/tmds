@@ -89,8 +89,61 @@ class _MyAppbarState extends State<MyAppbar> {
               ? [
                 IconButton(
                   icon: Icon(LucideIcons.logOut, color: Color(0xFF5E875E)),
-                  onPressed: () async {
-                    await logout();
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            'Logout?',
+                            style: GoogleFonts.inter(
+                              fontSize: 21.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF5E875E),
+                            ),
+                          ),
+                          content: Text(
+                            'Are you sure you want to logout?',
+                            style: GoogleFonts.inter(
+                              color: Color(0xFF5E875E),
+                              fontSize: 13,
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                'Cancel',
+                                style: GoogleFonts.inter(
+                                  color: Color(0xFF5E875E),
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                await logout();
+                              },
+                              style: ButtonStyle(
+                                foregroundColor: MaterialStateProperty.all(
+                                  const Color(0xFFFFFFFF),
+                                ),
+                                backgroundColor: MaterialStateProperty.all(
+                                  const Color(0xFF5E875E),
+                                ),
+                              ),
+                              child: Text(
+                                'Logout',
+                                style: GoogleFonts.inter(
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 ),
               ]
