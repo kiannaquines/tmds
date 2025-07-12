@@ -85,13 +85,68 @@ class _ManuscriptScreenState extends State<ManuscriptScreen> {
             ),
             SizedBox(height: 16),
             ...manuscript.asMap().entries.map((entry) {
+              final index = entry.key;
+              final study = entry.value;
+              final title = study['title'];
+              final department = study['department'];
+              final type = study['type'];
+
+              final subtitle = '$department - $type';
               return Padding(
-                padding: EdgeInsets.only(top: 16.0),
-                child: buildSubmissionCard(
-                  'Equipment Management...',
-                  'Submitted this week',
-                  () {},
-                ),
+                padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
+                child: buildSubmissionCard(title, subtitle, () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(
+                          'Confirmation',
+                          style: GoogleFonts.inter(
+                            fontSize: 21.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF5E875E),
+                          ),
+                        ),
+                        content: Text(
+                          'Are you sure you want to evaluate this study?',
+                          style: GoogleFonts.inter(fontSize: 13.0),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Close dialog
+                            },
+                            child: Text(
+                              'Cancel',
+                              style: GoogleFonts.inter(
+                                color: Color(0xFF5E875E),
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all(
+                                const Color(0xFFFFFFFF),
+                              ),
+                              backgroundColor: MaterialStateProperty.all(
+                                const Color(0xFF5E875E),
+                              ),
+                            ),
+                            child: Text(
+                              'Confirm',
+                              style: GoogleFonts.inter(
+                                color: Color(0xFFFFFFFF),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }),
               );
             }),
           ],
