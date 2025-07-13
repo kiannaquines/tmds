@@ -19,10 +19,15 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  bool _isSubmitting = false;
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   Future<void> login() async {
+    setState(() {
+      _isSubmitting = true;
+    });
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
@@ -67,9 +72,15 @@ class _SignInScreenState extends State<SignInScreen> {
       } else {
         final message = responseData['message'] ?? 'Login failed';
         showMessageSnackbar(context, message);
+        setState(() {
+          _isSubmitting = false;
+        });
       }
     } catch (e) {
       showMessageSnackbar(context, '$e');
+      setState(() {
+        _isSubmitting = false;
+      });
     }
   }
 
@@ -130,9 +141,12 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
             ),
             SizedBox(height: 16),
-            buildGreenButton('Sign In', () async {
-              await login();
-            }),
+            buildGreenButton(
+              _isSubmitting ? 'Please wait...' : 'Sign In',
+              () async {
+                await login();
+              },
+            ),
             SizedBox(height: 20),
             TextButton(
               onPressed: () {

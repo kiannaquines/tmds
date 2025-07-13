@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tdms_faculty/components/my_appbar.dart';
 import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/constants.dart';
+import 'package:tdms_faculty/screens/advisers.dart';
 import 'package:tdms_faculty/screens/my_submissions.dart';
 import 'package:tdms_faculty/screens/thesis_status.dart';
 import 'package:tdms_faculty/screens/upload_thesis.dart';
@@ -83,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         myNotification = data.cast<Map<String, dynamic>>();
       });
     } else {
-      showMessageSnackbar(context, 'Failed to fetch notifications.');
+      showMessageSnackbar(context, 'No notification found', isError: false);
     }
   }
 
@@ -213,10 +214,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             case 1:
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => MySubmissionScreen()),
+                MaterialPageRoute(builder: (_) => MyAdvisers()),
               );
               break;
             case 2:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => MySubmissionScreen()),
+              );
+              break;
+            case 3:
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (_) => UploadThesisScreen()),
@@ -231,6 +238,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           BottomNavigationBarItem(
             icon: Icon(LucideIcons.house),
             label: 'Dashboard',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(LucideIcons.users),
+            label: 'Advisers/Panel',
           ),
           BottomNavigationBarItem(
             icon: Icon(LucideIcons.fileArchive),
