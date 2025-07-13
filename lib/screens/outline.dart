@@ -88,6 +88,8 @@ class _OutlineScreenState extends State<OutlineScreen> {
             ...outline.asMap().entries.map((entry) {
               final index = entry.key;
               final study = entry.value;
+
+              final studyId = study['id'];
               final title = study['title'];
               final department = study['department'];
               final type = study['type'];
@@ -132,8 +134,11 @@ class _OutlineScreenState extends State<OutlineScreen> {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                   builder:
-                                      (context) =>
-                                          const FeedbackScreen(studyId: 1),
+                                      (context) => FeedbackScreen(
+                                        studyId: studyId,
+                                        studyTitle: title,
+                                        studyType: type,
+                                      ),
                                 ),
                               );
                             },

@@ -105,7 +105,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Hi! ${userName ?? 'Guest'},',
+                    'Hi! ${userName ?? 'Juan Dela Cruz'},',
                     style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
@@ -114,7 +114,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    userRole ?? 'Professor',
+                    userRole ?? 'Guest',
                     style: GoogleFonts.inter(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
@@ -140,6 +140,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
             ...studiesBelongsToMe.asMap().entries.map((entry) {
               final index = entry.key;
               final study = entry.value;
+              final studyId = study['id'];
               final title = study['title'];
               final department = study['department'];
               final type = study['type'];
@@ -184,8 +185,11 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                   builder:
-                                      (context) =>
-                                          const FeedbackScreen(studyId: 1),
+                                      (context) => FeedbackScreen(
+                                        studyId: studyId,
+                                        studyTitle: title,
+                                        studyType: type,
+                                      ),
                                 ),
                               );
                             },

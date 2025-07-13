@@ -418,10 +418,10 @@ Widget buildUserCard(
             ],
           ),
         ),
-        IconButton(
-          icon: Icon(LucideIcons.arrowRight, color: Color(0xFF5E875E)),
-          onPressed: onTap,
-        ),
+        // IconButton(
+        //   icon: Icon(LucideIcons.arrowRight, color: Color(0xFF5E875E)),
+        //   onPressed: onTap,
+        // ),
       ],
     ),
   );

@@ -88,6 +88,7 @@ class _ManuscriptScreenState extends State<ManuscriptScreen> {
             ...manuscript.asMap().entries.map((entry) {
               final index = entry.key;
               final study = entry.value;
+              final studyId = study['id'];
               final title = study['title'];
               final department = study['department'];
               final type = study['type'];
@@ -132,8 +133,11 @@ class _ManuscriptScreenState extends State<ManuscriptScreen> {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                   builder:
-                                      (context) =>
-                                          const FeedbackScreen(studyId: 1),
+                                      (context) => FeedbackScreen(
+                                        studyId: studyId,
+                                        studyTitle: title,
+                                        studyType: type,
+                                      ),
                                 ),
                               );
                             },
