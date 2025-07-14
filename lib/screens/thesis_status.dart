@@ -77,7 +77,7 @@ class _ThesisStatusScreenState extends State<ThesisStatusScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Study Progress Timeline',
+              'Thesis Progress',
               style: GoogleFonts.inter(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,

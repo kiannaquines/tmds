@@ -338,6 +338,16 @@ Widget buildTimelineItem({
                     color: const Color(0xFF5E875E).withOpacity(0.8),
                   ),
                 ),
+                const SizedBox(height: 8),
+                Text(
+                  '(Revised)',
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    height: 1.4,
+                    color: const Color(0xFF5E875E).withOpacity(0.8),
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
               ],
             ),
           ),
