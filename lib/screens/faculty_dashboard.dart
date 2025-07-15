@@ -86,44 +86,6 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.only(bottom: 13),
-              decoration: BoxDecoration(
-                color: const Color(0xFFE8F5E9), // Light green background
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Hi! ${userName ?? 'Juan Dela Cruz'},',
-                    style: GoogleFonts.inter(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF5E875E),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    userRole ?? 'Guest',
-                    style: GoogleFonts.inter(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFF5E875E),
-                    ),
-                  ),
-                ],
-              ),
-            ),
             Text(
               'New Arrived Paper',
               style: GoogleFonts.inter(
@@ -162,7 +124,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                           ),
                         ),
                         content: Text(
-                          'Are you sure you want to evaluate this study?',
+                          'Please ensure you already have the paper of this study submitted to you before evaluating.',
                           style: GoogleFonts.inter(
                             color: Color(0xFF5E875E),
                             fontSize: 13,
@@ -202,7 +164,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                               ),
                             ),
                             child: Text(
-                              'Confirm',
+                              'Yes, I Confirm',
                               style: GoogleFonts.inter(
                                 color: Color(0xFFFFFFFF),
                               ),

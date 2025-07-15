@@ -32,15 +32,15 @@ Widget buildTextField(
       obscureText: isPassword,
       style: GoogleFonts.inter(
         color: Color(0xFF5E875E),
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
       ),
       decoration: InputDecoration.collapsed(
         hintText: hint,
         hintStyle: GoogleFonts.inter(
           color: Color(0xFF5E875E),
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
         ),
       ),
     ),
@@ -119,7 +119,7 @@ Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
             children: [
               Text(
                 title,
-                maxLines: 2,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w500,
@@ -226,8 +226,8 @@ Widget buildDropdown(
       iconEnabledColor: Color(0xFF5E875E),
       style: GoogleFonts.inter(
         color: Color(0xFF5E875E),
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
       ),
       items:
           items.map((String item) {

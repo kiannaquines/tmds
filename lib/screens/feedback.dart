@@ -104,22 +104,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 ),
               ),
               Text(
-                'Evaluate thesis here.',
+                'Use this section to assess the thesis.',
                 style: GoogleFonts.inter(
                   color: Color(0xFF5E875E),
                   fontSize: 12,
                 ),
               ),
               SizedBox(height: 16),
-              Text(
-                'Thesis Details',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF5E875E),
-                ),
-              ),
-              SizedBox(height: 10),
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -157,43 +148,26 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         children: [
                           Text(
                             widget.studyTitle,
-                            maxLines: 2,
+                            maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
                               color: Color(0xFF5E875E),
-                              fontSize: 16,
+                              fontSize: 15,
                             ),
                           ),
                           SizedBox(height: 4),
-                          Container(
-                            padding: EdgeInsets.all(3),
-                            decoration: BoxDecoration(
+                          Text(
+                            widget.studyType,
+                            style: GoogleFonts.inter(
                               color: Color(0xFF5E875E),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-
-                            child: Text(
-                              widget.studyType,
-                              style: GoogleFonts.inter(
-                                color: Color(0xFFFFFFFF),
-                                fontSize: 10,
-                              ),
+                              fontSize: 10,
                             ),
                           ),
                         ],
                       ),
                     ),
                   ],
-                ),
-              ),
-              SizedBox(height: 16),
-              Text(
-                'Evaluation Comment',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF5E875E),
                 ),
               ),
               SizedBox(height: 16),
