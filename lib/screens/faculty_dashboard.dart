@@ -12,6 +12,7 @@ import 'package:tdms_faculty/screens/feedback.dart';
 import 'package:tdms_faculty/screens/manuscript.dart';
 import 'package:tdms_faculty/screens/outline.dart';
 import 'package:tdms_faculty/components/utils.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class FacultyDashboardScreen extends StatefulWidget {
   const FacultyDashboardScreen({super.key});
@@ -76,167 +77,222 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: MyAppbar(title: 'Faculty Dashboard', showActions: true),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'New Arrived Paper',
-              style: GoogleFonts.inter(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF5E875E),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: MyAppbar(title: 'Faculty Dashboard', showActions: true),
+        ),
+        body: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'New Arrived Paper',
+                style: GoogleFonts.inter(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF5E875E),
+                ),
               ),
-            ),
-            Text(
-              'All newly submitted papers pending your review will appear here.',
-              style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 12),
-            ),
-            SizedBox(height: 16),
-            ...studiesBelongsToMe.asMap().entries.map((entry) {
-              final index = entry.key;
-              final study = entry.value;
-              final studyId = study['id'];
-              final title = study['title'];
-              final department = study['department'];
-              final type = study['type'];
+              Text(
+                'All newly submitted papers pending your review will appear here.',
+                style: GoogleFonts.inter(
+                  color: Color(0xFF5E875E),
+                  fontSize: 12,
+                ),
+              ),
+              SizedBox(height: 16),
 
-              final subtitle = '$department - $type';
-              return Padding(
-                padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
-                child: buildSubmissionCard(title, subtitle, () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text(
-                          'Confirmation',
-                          style: GoogleFonts.inter(
-                            fontSize: 21.0,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF5E875E),
-                          ),
-                        ),
-                        content: Text(
-                          'Please ensure you already have the paper of this study submitted to you before evaluating.',
-                          style: GoogleFonts.inter(
-                            color: Color(0xFF5E875E),
-                            fontSize: 13,
-                          ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'Cancel',
-                              style: GoogleFonts.inter(
-                                color: Color(0xFF5E875E),
-                              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.circular(12.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 6,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                height: 48,
+                width: MediaQuery.of(context).size.width,
+                child: TabBar(
+                  indicator: BoxDecoration(
+                    color: Color(0xFF5E875E),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  dividerColor: Colors.transparent,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Color(0xFF5E875E),
+                  tabs: const [
+                    Tab(icon: Icon(LucideIcons.layoutList)),
+                    Tab(icon: Icon(LucideIcons.notebookPen)),
+                    Tab(icon: Icon(LucideIcons.listCheck)),
+                  ],
+                ),
+              ),
+
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: TabBarView(
+                    children: [
+                      ListView.builder(
+                        itemCount: studiesBelongsToMe.length,
+                        itemBuilder: (context, index) {
+                          final study = studiesBelongsToMe[index];
+                          final studyId = study['id'];
+                          final title = study['title'];
+                          final department = study['department'];
+                          final type = study['type'];
+                          final subtitle = '$department - $type';
+
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              top: index == 0 ? 0 : 16.0,
                             ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => FeedbackScreen(
-                                        studyId: studyId,
-                                        studyTitle: title,
-                                        studyType: type,
+                            child: buildSubmissionCard(title, subtitle, () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      'Confirmation',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 21.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF5E875E),
                                       ),
-                                ),
+                                    ),
+                                    content: Text(
+                                      'Please ensure you already have the paper of this study submitted to you before evaluating.',
+                                      style: GoogleFonts.inter(
+                                        color: Color(0xFF5E875E),
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text(
+                                          'Cancel',
+                                          style: GoogleFonts.inter(
+                                            color: Color(0xFF5E875E),
+                                          ),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (context) => FeedbackScreen(
+                                                    studyId: studyId,
+                                                    studyTitle: title,
+                                                    studyType: type,
+                                                  ),
+                                            ),
+                                          );
+                                        },
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                Color(0xFF5E875E),
+                                              ),
+                                        ),
+                                        child: Text(
+                                          'Yes, I Confirm',
+                                          style: GoogleFonts.inter(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
-                            },
-                            style: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all(
-                                const Color(0xFFFFFFFF),
-                              ),
-                              backgroundColor: MaterialStateProperty.all(
-                                const Color(0xFF5E875E),
-                              ),
-                            ),
-                            child: Text(
-                              'Yes, I Confirm',
-                              style: GoogleFonts.inter(
-                                color: Color(0xFFFFFFFF),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }),
-              );
-            }),
+                            }),
+                          );
+                        },
+                      ),
+
+                      // Tab 2: In Progress
+                      Center(child: Text('In Progress tab')),
+
+                      // Tab 3: Approved
+                      Center(child: Text('Approved tab')),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: (index) {
+            if (_selectedIndex == index) return;
+
+            setState(() {
+              _selectedIndex = index;
+            });
+
+            switch (index) {
+              case 0:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => OutlineScreen()),
+                );
+                break;
+              case 1:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => AdviseeScreen()),
+                );
+                break;
+              case 2:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => ManuscriptScreen()),
+                );
+                break;
+              case 3:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => OutlineScreen()),
+                );
+                break;
+            }
+          },
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Color(0xFF5E875E),
+          unselectedItemColor: Color(0xFF5E875E),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(LucideIcons.house),
+              label: 'Dashboard',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(LucideIcons.users),
+              label: 'Advisee',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(LucideIcons.file),
+              label: 'Manuscript',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(LucideIcons.file),
+              label: 'Outline',
+            ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          if (_selectedIndex == index) return;
-
-          setState(() {
-            _selectedIndex = index;
-          });
-
-          switch (index) {
-            case 0:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => OutlineScreen()),
-              );
-              break;
-            case 1:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => AdviseeScreen()),
-              );
-              break;
-            case 2:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => ManuscriptScreen()),
-              );
-              break;
-            case 3:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => OutlineScreen()),
-              );
-              break;
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Color(0xFF5E875E),
-        unselectedItemColor: Color(0xFF5E875E),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(LucideIcons.house),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(LucideIcons.users),
-            label: 'Advisee',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(LucideIcons.file),
-            label: 'Manuscript',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(LucideIcons.file),
-            label: 'Outline',
-          ),
-        ],
       ),
     );
   }

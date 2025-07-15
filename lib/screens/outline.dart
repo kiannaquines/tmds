@@ -164,6 +164,19 @@ class _OutlineScreenState extends State<OutlineScreen> {
                 }),
               );
             }),
+            if (outline.isEmpty)
+              Container(
+                color: Color(0xFFE8F2E8),
+                padding: EdgeInsets.all(12.0),
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  'Oppss, No outline papers yet...',
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    color: Color(0xFF5E875E),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
