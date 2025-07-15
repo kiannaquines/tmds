@@ -185,7 +185,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               }),
               SizedBox(height: 32),
               buildGreenButton(
-                isSubmitting ? 'Please wait..' : 'Submit Evaluation',
+                isSubmitting ? 'Please wait...' : 'Submit Evaluation',
                 () async {
                   await feedBack();
                 },

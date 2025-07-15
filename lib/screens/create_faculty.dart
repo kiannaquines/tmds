@@ -23,6 +23,8 @@ class _CreateFacultyAccountScreenState
     fetchRoles();
   }
 
+  bool isSubmitting = false;
+
   final _emailController = TextEditingController();
   final _fullnameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -54,6 +56,10 @@ class _CreateFacultyAccountScreenState
   }
 
   Future<void> registerFaculty() async {
+    setState(() {
+      isSubmitting = true;
+    });
+
     final email = _emailController.text.trim();
     final name = _fullnameController.text.trim();
     final password = _passwordController.text.trim();
@@ -81,6 +87,10 @@ class _CreateFacultyAccountScreenState
     if (response.statusCode == 201) {
       final message = responseData['message'];
 
+      setState(() {
+        isSubmitting = false;
+      });
+
       showMessageSnackbar(context, message, isError: false);
       await Future.delayed(Duration(milliseconds: 500));
 
@@ -90,6 +100,10 @@ class _CreateFacultyAccountScreenState
     } else {
       final message = responseData['message'] ?? 'Registration failed';
       showMessageSnackbar(context, message);
+
+      setState(() {
+        isSubmitting = false;
+      });
     }
   }
 
@@ -164,9 +178,12 @@ class _CreateFacultyAccountScreenState
               ),
             ),
             SizedBox(height: 16),
-            buildGreenButton('Create Account', () async {
-              await registerFaculty();
-            }),
+            buildGreenButton(
+              isSubmitting ? 'Please wait...' : 'Create Account',
+              () async {
+                await registerFaculty();
+              },
+            ),
           ],
         ),
       ),

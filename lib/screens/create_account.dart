@@ -16,12 +16,17 @@ class CreateAccountScreen extends StatefulWidget {
 }
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
+  bool isSubmitting = false;
+
   final _emailController = TextEditingController();
   final _fullnameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
   Future<void> register() async {
+    setState(() {
+      isSubmitting = true;
+    });
     final email = _emailController.text.trim();
     final name = _fullnameController.text.trim();
     final password = _passwordController.text.trim();
@@ -48,6 +53,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     if (response.statusCode == 201) {
       final message = responseData['message'];
 
+      setState(() {
+        isSubmitting = false;
+      });
+
       showMessageSnackbar(context, message, isError: false);
       await Future.delayed(Duration(milliseconds: 500));
 
@@ -57,6 +66,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     } else {
       final message = responseData['message'] ?? 'Registration failed';
       showMessageSnackbar(context, message);
+      setState(() {
+        isSubmitting = false;
+      });
     }
   }
 
@@ -123,9 +135,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               ),
             ),
             SizedBox(height: 16),
-            buildGreenButton('Create Account', () async {
-              await register();
-            }),
+            buildGreenButton(
+              isSubmitting ? 'Please wait...' : 'Create Account',
+              () async {
+                await register();
+              },
+            ),
 
             SizedBox(height: 20),
             Center(

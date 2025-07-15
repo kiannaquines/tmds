@@ -112,7 +112,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
             ),
             SizedBox(height: 16),
             buildGreenButton(
-              _isLoading ? 'Loading..' : 'Forgot Password',
+              _isLoading ? 'Please wait...' : 'Forgot Password',
               () async {
                 await forgotPassword();
               },
