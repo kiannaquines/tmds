@@ -62,15 +62,15 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
       },
     );
 
+    final Map<String, dynamic> responseBody = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> data = responseBody['data'];
 
       setState(() {
         studiesBelongsToMe = data.cast<Map<String, dynamic>>();
       });
     } else {
-      showMessageSnackbar(context, 'Failed to fetch studies submissions.');
+      showMessageSnackbar(context, responseBody['message']);
     }
   }
 
@@ -280,7 +280,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(LucideIcons.users),
-              label: 'Advisee',
+              label: 'Advisee/Committe',
             ),
             BottomNavigationBarItem(
               icon: Icon(LucideIcons.file),

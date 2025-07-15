@@ -44,15 +44,15 @@ class _ThesisStatusScreenState extends State<ThesisStatusScreen> {
       },
     );
 
+    final Map<String, dynamic> responseBody = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> data = responseBody['data'];
 
       setState(() {
         studyTimeLine = data.cast<Map<String, dynamic>>();
       });
     } else {
-      showMessageSnackbar(context, 'Failed to fetch timeline data.');
+      showMessageSnackbar(context, responseBody['message']);
     }
   }
 

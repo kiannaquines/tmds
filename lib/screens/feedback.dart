@@ -25,6 +25,11 @@ class FeedbackScreen extends StatefulWidget {
 }
 
 class _FeedbackScreenState extends State<FeedbackScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   final _feedbackController = TextEditingController();
   String? _selectedStatus;
   bool isSubmitting = false;

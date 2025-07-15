@@ -8,6 +8,11 @@ Future<String?> getToken() async {
   return prefs.getString('auth_token');
 }
 
+Future<String?> getRole() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('role');
+}
+
 Future<String?> fetchUserName() async {
   final url = Uri.parse('$apiUrl/user');
   final token = await getToken();

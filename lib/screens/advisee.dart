@@ -21,6 +21,7 @@ class _AdviseeScreenState extends State<AdviseeScreen> {
   void initState() {
     super.initState();
     _fetchMyAdvisees();
+    _fetchStudentsIamPanel();
   }
 
   Future<String?> _getToken() async {
@@ -29,6 +30,7 @@ class _AdviseeScreenState extends State<AdviseeScreen> {
   }
 
   List<Map<String, dynamic>> myAdvisees = [];
+  List<Map<String, dynamic>> myStudent = [];
 
   Future<void> _fetchMyAdvisees() async {
     final url = Uri.parse('$apiUrl/advisees');
@@ -49,9 +51,38 @@ class _AdviseeScreenState extends State<AdviseeScreen> {
       setState(() {
         myAdvisees = data.cast<Map<String, dynamic>>();
       });
-    } else {
+    } else if (response.statusCode == 401 || response.statusCode == 404) {
       final errorMessage = responseBody['message'];
       showMessageSnackbar(context, errorMessage);
+    } else {
+      showMessageSnackbar(context, 'Something went wrong please try again.');
+    }
+  }
+
+  Future<void> _fetchStudentsIamPanel() async {
+    final url = Uri.parse('$apiUrl/my-student');
+    final token = await _getToken();
+    final response = await http.get(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+    );
+
+    final Map<String, dynamic> responseBody = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = responseBody['data'];
+
+      setState(() {
+        myStudent = data.cast<Map<String, dynamic>>();
+      });
+    } else if (response.statusCode == 401 || response.statusCode == 404) {
+      final errorMessage = responseBody['message'];
+      showMessageSnackbar(context, errorMessage);
+    } else {
+      showMessageSnackbar(context, 'Something went wrong please try again.');
     }
   }
 
@@ -115,6 +146,107 @@ class _AdviseeScreenState extends State<AdviseeScreen> {
                 width: MediaQuery.of(context).size.width,
                 child: Text(
                   'Oppss, No advisees yet...',
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    color: Color(0xFF5E875E),
+                  ),
+                ),
+              ),
+            SizedBox(height: 16),
+            Text(
+              'Students',
+              style: GoogleFonts.inter(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF5E875E),
+              ),
+            ),
+            Text(
+              'Students assigned to you as a panel member will appear here.',
+              style: GoogleFonts.inter(
+                color: Color(0xFF5E875E).withOpacity(0.8),
+                fontSize: 12,
+                height: 1.4,
+              ),
+            ),
+            SizedBox(height: 16),
+            ...myStudent.asMap().entries.map((entry) {
+              final index = entry.key;
+              final advisee = entry.value;
+
+              final adviseeName = advisee['name'] ?? '';
+              final adviseeStudy = advisee['title'] ?? '';
+              final adviseeStudyType = advisee['type'] ?? '';
+
+              return Padding(
+                padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
+                child: GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            'Confirmation',
+                            style: GoogleFonts.inter(
+                              fontSize: 21.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF5E875E),
+                            ),
+                          ),
+                          content: Text(
+                            'Please ensure you already have the paper of this study submitted to you before evaluating.',
+                            style: GoogleFonts.inter(
+                              color: Color(0xFF5E875E),
+                              fontSize: 13,
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                'Cancel',
+                                style: GoogleFonts.inter(
+                                  color: Color(0xFF5E875E),
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {},
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                  Color(0xFF5E875E),
+                                ),
+                              ),
+                              child: Text(
+                                'Yes, I Confirm',
+                                style: GoogleFonts.inter(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: buildUserCard(
+                    adviseeName,
+                    adviseeStudy,
+                    adviseeStudyType,
+                    () {},
+                  ),
+                ),
+              );
+            }),
+
+            if (myStudent.isEmpty)
+              Container(
+                color: Color(0xFFE8F2E8),
+                padding: EdgeInsets.all(12.0),
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  'No student included you as a panel...',
                   style: GoogleFonts.inter(
                     fontSize: 16,
                     color: Color(0xFF5E875E),

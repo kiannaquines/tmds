@@ -60,7 +60,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         mySubmissions = data.cast<Map<String, dynamic>>();
       });
     } else {
-      showMessageSnackbar(context, 'Failed to fetch submissions.');
+      showMessageSnackbar(
+        context,
+        'Failed to fetch submissions.',
+        isError: true,
+      );
     }
   }
 
@@ -77,14 +81,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       },
     );
 
+    final Map<String, dynamic> responseBody = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> data = responseBody['data'];
 
       setState(() {
         myNotification = data.cast<Map<String, dynamic>>();
       });
-    } else {
+    } else if (response.statusCode == 401 || response.statusCode == 404) {
       showMessageSnackbar(context, 'No notification found', isError: false);
     }
   }

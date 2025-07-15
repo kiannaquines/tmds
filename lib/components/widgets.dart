@@ -449,6 +449,8 @@ Widget buildUserCard(
               SizedBox(height: 4),
               Text(
                 subtitle,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.inter(
                   color: Color(0xFF5E875E),
                   fontSize: 10,
