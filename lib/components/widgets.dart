@@ -124,7 +124,7 @@ Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w500,
                   color: Color(0xFF5E875E),
-                  fontSize: 15,
+                  fontSize: 12,
                 ),
               ),
               SizedBox(height: 4),
@@ -147,7 +147,7 @@ Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
   );
 }
 
-Widget buildNotificationCard(String title, String subtitle) {
+Widget buildNotificationCard(String title, String subtitle, String timeAgo) {
   return SizedBox(
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -174,7 +174,7 @@ Widget buildNotificationCard(String title, String subtitle) {
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w500,
                   color: Color(0xFF5E875E),
-                  fontSize: 15,
+                  fontSize: 12,
                 ),
               ),
               SizedBox(height: 4),
@@ -186,7 +186,7 @@ Widget buildNotificationCard(String title, String subtitle) {
                 ),
               ),
               Text(
-                '~ Elizabeth R. Genotiva',
+                timeAgo,
                 style: GoogleFonts.inter(color: Color(0xFF5E875E), fontSize: 8),
               ),
             ],
@@ -241,6 +241,7 @@ Widget buildDropdown(
 Widget buildTimelineItem({
   required String title,
   required String subtitle,
+  required String status,
   String? timeAgo,
   IconData? icon = Icons.check_circle,
   bool isLast = false,
@@ -340,7 +341,7 @@ Widget buildTimelineItem({
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '(Revised)',
+                  '($status)',
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     height: 1.4,

@@ -109,16 +109,16 @@ class _MyAdvisersState extends State<MyAdvisers> {
               final index = entry.key;
               final advisee = entry.value;
 
-              final adviseeName = advisee['student_name'] ?? '';
-              final adviseeStudy = advisee['study_title'] ?? '';
-              final adviseeStudyType = advisee['study_type'] ?? '';
+              final adviserName = advisee['adviser_name'] ?? '';
+              final adviserEmail = advisee['adviser_email'] ?? '';
+              final adviserRole = advisee['role'] ?? '';
 
               return Padding(
                 padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
                 child: buildUserCard(
-                  adviseeName,
-                  adviseeStudy,
-                  adviseeStudyType,
+                  adviserName,
+                  adviserEmail,
+                  adviserRole,
                   () {},
                 ),
               );
@@ -137,7 +137,7 @@ class _MyAdvisersState extends State<MyAdvisers> {
                   ),
                 ),
               ),
-
+            SizedBox(height: 16),
             Text(
               'My Panels',
               style: GoogleFonts.inter(
@@ -153,20 +153,15 @@ class _MyAdvisersState extends State<MyAdvisers> {
             SizedBox(height: 16),
             ...myPanels.asMap().entries.map((entry) {
               final index = entry.key;
-              final advisee = entry.value;
+              final panel = entry.value;
 
-              final adviseeName = advisee['student_name'] ?? '';
-              final adviseeStudy = advisee['study_title'] ?? '';
-              final adviseeStudyType = advisee['study_type'] ?? '';
+              final panelName = panel['panel_name'] ?? '';
+              final panelEmail = panel['panel_email'] ?? '';
+              final panelRole = panel['role'] ?? '';
 
               return Padding(
                 padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
-                child: buildUserCard(
-                  adviseeName,
-                  adviseeStudy,
-                  adviseeStudyType,
-                  () {},
-                ),
+                child: buildUserCard(panelName, panelEmail, panelRole, () {}),
               );
             }),
 

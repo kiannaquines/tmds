@@ -103,7 +103,7 @@ class _ThesisStatusScreenState extends State<ThesisStatusScreen> {
                         final String comment = timeline['comment'] ?? '';
                         final String checkBy = timeline['check_by'] ?? '';
                         final String createdAt = timeline['created_at'] ?? '';
-
+                        final String status = timeline['status'] ?? '';
                         DateTime createdDate =
                             DateTime.tryParse(createdAt) ?? DateTime.now();
                         String timeAgo = timeago.format(createdDate);
@@ -116,6 +116,7 @@ class _ThesisStatusScreenState extends State<ThesisStatusScreen> {
                             title: checkBy,
                             subtitle: comment,
                             timeAgo: timeAgo,
+                            status: status,
                           ),
                         );
                       }).toList(),

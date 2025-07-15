@@ -12,6 +12,7 @@ import 'package:tdms_faculty/screens/advisers.dart';
 import 'package:tdms_faculty/screens/my_submissions.dart';
 import 'package:tdms_faculty/screens/thesis_status.dart';
 import 'package:tdms_faculty/screens/upload_thesis.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -169,12 +170,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
               final String comment = notification['comment'] ?? '';
               final String studyType = notification['study_type'] ?? '';
               final String title = notification['study_title'] ?? '';
+              final String createdAt = notification['created_at'] ?? '';
+
+              DateTime createdDate =
+                  DateTime.tryParse(createdAt) ?? DateTime.now();
+              String timeAgo = timeago.format(createdDate);
 
               return Padding(
                 padding: EdgeInsets.only(top: index == 0 ? 0.0 : 12.0),
                 child: buildNotificationCard(
                   '$studyType - $title ($status)',
                   comment,
+                  timeAgo,
                 ),
               );
             }),

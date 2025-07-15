@@ -19,6 +19,7 @@ class UploadThesisScreen extends StatefulWidget {
 class _UploadThesisScreenState extends State<UploadThesisScreen> {
   final _titleController = TextEditingController();
   final _yearController = TextEditingController();
+  bool _isSubmitting = false;
 
   String? _selectedDepartment;
   String? _selectedPanel1;
@@ -112,6 +113,10 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
   }
 
   Future<void> storeThesis() async {
+    setState(() {
+      _isSubmitting = true;
+    });
+
     final title = _titleController.text.trim();
     final department = _selectedDepartment;
     final adviser = _selectedAdviser;
@@ -131,8 +136,6 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
       "year": year,
       "type": type,
     });
-
-    debugPrint(body);
 
     try {
       final url = Uri.parse('$apiUrl/thesis');
@@ -162,12 +165,19 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
           _selectedPanel2 = null;
           _selectedPanel3 = null;
           _selectedStudyType = null;
+          _isSubmitting = false;
         });
       } else {
         showMessageSnackbar(context, bodyMessage['message'], isError: true);
+        setState(() {
+          _isSubmitting = false;
+        });
       }
     } catch (e) {
       showMessageSnackbar(context, 'Something went wrong: $e', isError: true);
+      setState(() {
+        _isSubmitting = false;
+      });
     }
   }
 
@@ -274,9 +284,12 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
               ],
             ),
             SizedBox(height: 40),
-            buildGreenButton('Submit Thesis', () async {
-              await storeThesis();
-            }),
+            buildGreenButton(
+              _isSubmitting ? 'Please wait...' : 'Submit Thesis',
+              () async {
+                await storeThesis();
+              },
+            ),
           ],
         ),
       ),
