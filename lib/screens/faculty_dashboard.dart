@@ -12,7 +12,6 @@ import 'package:tdms_faculty/screens/feedback.dart';
 import 'package:tdms_faculty/screens/manuscript.dart';
 import 'package:tdms_faculty/screens/outline.dart';
 import 'package:tdms_faculty/components/utils.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class FacultyDashboardScreen extends StatefulWidget {
   const FacultyDashboardScreen({super.key});

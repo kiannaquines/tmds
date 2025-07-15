@@ -160,7 +160,19 @@ Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
 }
 
 Widget buildNotificationCard(String title, String subtitle, String timeAgo) {
-  return SizedBox(
+  return Container(
+    padding: EdgeInsets.all(12.0),
+    decoration: BoxDecoration(
+      color: Color(0xFFFFFFFF),
+      borderRadius: BorderRadius.circular(12.0),
+      boxShadow: [
+        BoxShadow(
+          color: Color(0xFFFFFFFF).withOpacity(0.1),
+          blurRadius: 6,
+          offset: Offset(0, 1),
+        ),
+      ],
+    ),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -358,7 +370,6 @@ Widget buildTimelineItem({
                     fontSize: 12,
                     height: 1.4,
                     color: const Color(0xFF5E875E).withOpacity(0.8),
-                    fontStyle: FontStyle.italic,
                   ),
                 ),
               ],

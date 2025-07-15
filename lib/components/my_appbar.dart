@@ -103,7 +103,7 @@ class _MyAppbarState extends State<MyAppbar> {
                             ),
                           ),
                           content: Text(
-                            'Are you sure you want to logout?',
+                            'Are you sure you want to logout this account?',
                             style: GoogleFonts.inter(
                               color: Color(0xFF5E875E),
                               fontSize: 13,
@@ -134,7 +134,7 @@ class _MyAppbarState extends State<MyAppbar> {
                                 ),
                               ),
                               child: Text(
-                                'Logout',
+                                'Yes, Logout',
                                 style: GoogleFonts.inter(
                                   color: Color(0xFFFFFFFF),
                                 ),
