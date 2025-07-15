@@ -109,13 +109,6 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                 decoration: BoxDecoration(
                   color: Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.circular(12.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 6,
-                      offset: Offset(0, 1),
-                    ),
-                  ],
                 ),
                 height: 48,
                 width: MediaQuery.of(context).size.width,

@@ -110,8 +110,6 @@ Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
       ],
     ),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           width: 48,
@@ -174,8 +172,6 @@ Widget buildNotificationCard(String title, String subtitle, String timeAgo) {
       ],
     ),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           width: 48,
@@ -419,8 +415,6 @@ Widget buildUserCard(
       ],
     ),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           width: 48,
@@ -446,7 +440,6 @@ Widget buildUserCard(
                   fontSize: 15,
                 ),
               ),
-              SizedBox(height: 4),
               Text(
                 subtitle,
                 maxLines: 2,
@@ -466,10 +459,6 @@ Widget buildUserCard(
             ],
           ),
         ),
-        // IconButton(
-        //   icon: Icon(LucideIcons.arrowRight, color: Color(0xFF5E875E)),
-        //   onPressed: onTap,
-        // ),
       ],
     ),
   );
