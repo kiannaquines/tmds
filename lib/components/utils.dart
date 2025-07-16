@@ -3,6 +3,11 @@ import 'package:tdms_faculty/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+Future<bool> hasToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('auth_token') ?? false;
+}
+
 Future<String?> getToken() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getString('auth_token');

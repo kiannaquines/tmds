@@ -78,7 +78,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
               style: GoogleFonts.inter(
                 color: Color(0xFF5E875E),
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
             Text(
