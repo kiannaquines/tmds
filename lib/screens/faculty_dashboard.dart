@@ -30,7 +30,9 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
     super.initState();
     _loadUserName();
     _loadUserRole();
-    _fetchStudiesBelongToMe();
+    _fetchPendingStudies();
+    _fetchInProgressStudies();
+    _fetchApprovedtudies();
   }
 
   Future<void> _loadUserName() async {
@@ -47,10 +49,12 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
     });
   }
 
-  List<Map<String, dynamic>> studiesBelongsToMe = [];
+  List<Map<String, dynamic>> pendingStudies = [];
+  List<Map<String, dynamic>> inProgressStudies = [];
+  List<Map<String, dynamic>> approvedStudies = [];
 
-  Future<void> _fetchStudiesBelongToMe() async {
-    final url = Uri.parse('$apiUrl/academic/guidance/thesis');
+  Future<void> _fetchPendingStudies() async {
+    final url = Uri.parse('$apiUrl/pending');
     final token = await getToken();
 
     final response = await http.get(
@@ -67,7 +71,57 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
       final List<dynamic> data = responseBody['data'];
 
       setState(() {
-        studiesBelongsToMe = data.cast<Map<String, dynamic>>();
+        pendingStudies = data.cast<Map<String, dynamic>>();
+      });
+    } else {
+      showMessageSnackbar(context, responseBody['message']);
+    }
+  }
+
+  Future<void> _fetchInProgressStudies() async {
+    final url = Uri.parse('$apiUrl/in-progress');
+    final token = await getToken();
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+    );
+
+    final Map<String, dynamic> responseBody = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final List<dynamic> data = responseBody['data'];
+
+      setState(() {
+        inProgressStudies = data.cast<Map<String, dynamic>>();
+      });
+    } else {
+      showMessageSnackbar(context, responseBody['message']);
+    }
+  }
+
+  Future<void> _fetchApprovedtudies() async {
+    final url = Uri.parse('$apiUrl/approved');
+    final token = await getToken();
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+    );
+
+    final Map<String, dynamic> responseBody = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final List<dynamic> data = responseBody['data'];
+
+      setState(() {
+        approvedStudies = data.cast<Map<String, dynamic>>();
       });
     } else {
       showMessageSnackbar(context, responseBody['message']);
@@ -134,92 +188,287 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                   padding: const EdgeInsets.only(top: 16.0),
                   child: TabBarView(
                     children: [
-                      ListView.builder(
-                        itemCount: studiesBelongsToMe.length,
-                        itemBuilder: (context, index) {
-                          final study = studiesBelongsToMe[index];
-                          final studyId = study['id'];
-                          final title = study['title'];
-                          final department = study['department'];
-                          final type = study['type'];
-                          final subtitle = '$department - $type';
+                      // Tab 1: Pending
+                      pendingStudies.isEmpty
+                          ? buildEmptyState(
+                            'No pending studies to review.\nAll caught up!',
+                          )
+                          : ListView.builder(
+                            itemCount: pendingStudies.length,
+                            itemBuilder: (context, index) {
+                              final study = pendingStudies[index];
+                              final studyId = study['study']['id'];
+                              final title = study['study']['title'];
+                              final department = study['study']['department'];
+                              final type = study['study']['type'];
+                              final subtitle = '$department - $type';
 
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              top: index == 0 ? 0 : 16.0,
-                            ),
-                            child: buildSubmissionCard(title, subtitle, () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      'Confirmation',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 21.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF5E875E),
-                                      ),
-                                    ),
-                                    content: Text(
-                                      'Please ensure you already have the paper of this study submitted to you before evaluating.',
-                                      style: GoogleFonts.inter(
-                                        color: Color(0xFF5E875E),
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text(
-                                          'Cancel',
-                                          style: GoogleFonts.inter(
-                                            color: Color(0xFF5E875E),
-                                          ),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                              builder:
-                                                  (context) => FeedbackScreen(
-                                                    studyId: studyId,
-                                                    studyTitle: title,
-                                                    studyType: type,
-                                                  ),
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  top: index == 0 ? 0 : 16.0,
+                                ),
+                                child: buildSubmissionCard(
+                                  title,
+                                  subtitle,
+                                  null,
+                                  () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            'Confirmation',
+                                            style: GoogleFonts.inter(
+                                              fontSize: 21.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xFF5E875E),
                                             ),
-                                          );
-                                        },
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                Color(0xFF5E875E),
-                                              ),
-                                        ),
-                                        child: Text(
-                                          'Yes, I Confirm',
-                                          style: GoogleFonts.inter(
-                                            color: Colors.white,
                                           ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
+                                          content: Text(
+                                            'Please ensure you already have the paper of this study submitted to you before evaluating.',
+                                            style: GoogleFonts.inter(
+                                              color: Color(0xFF5E875E),
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text(
+                                                'Cancel',
+                                                style: GoogleFonts.inter(
+                                                  color: Color(0xFF5E875E),
+                                                ),
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(
+                                                  context,
+                                                ).pushReplacement(
+                                                  MaterialPageRoute(
+                                                    builder:
+                                                        (context) =>
+                                                            FeedbackScreen(
+                                                              studyId: studyId,
+                                                              studyTitle: title,
+                                                              studyType: type,
+                                                            ),
+                                                  ),
+                                                );
+                                              },
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                      Color(0xFF5E875E),
+                                                    ),
+                                              ),
+                                              child: Text(
+                                                'Yes, I Confirm',
+                                                style: GoogleFonts.inter(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
                               );
-                            }),
-                          );
-                        },
-                      ),
+                            },
+                          ),
 
                       // Tab 2: In Progress
-                      Center(child: Text('In Progress tab')),
+                      inProgressStudies.isEmpty
+                          ? buildEmptyState(
+                            'No studies in progress.\nStart reviewing pending studies!',
+                          )
+                          : ListView.builder(
+                            itemCount: inProgressStudies.length,
+                            itemBuilder: (context, index) {
+                              final study = inProgressStudies[index];
+                              final studyId = study['study']['id'];
+                              final title = study['study']['title'];
+                              final department = study['study']['department'];
+                              final type = study['study']['type'];
+                              final subtitle = '$department - $type';
+
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  top: index == 0 ? 0 : 16.0,
+                                ),
+                                child: buildSubmissionCard(
+                                  title,
+                                  subtitle,
+                                  null,
+                                  () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            'Confirmation',
+                                            style: GoogleFonts.inter(
+                                              fontSize: 21.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xFF5E875E),
+                                            ),
+                                          ),
+                                          content: Text(
+                                            'Please ensure you already have the paper of this study submitted to you before evaluating.',
+                                            style: GoogleFonts.inter(
+                                              color: Color(0xFF5E875E),
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text(
+                                                'Cancel',
+                                                style: GoogleFonts.inter(
+                                                  color: Color(0xFF5E875E),
+                                                ),
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(
+                                                  context,
+                                                ).pushReplacement(
+                                                  MaterialPageRoute(
+                                                    builder:
+                                                        (context) =>
+                                                            FeedbackScreen(
+                                                              studyId: studyId,
+                                                              studyTitle: title,
+                                                              studyType: type,
+                                                            ),
+                                                  ),
+                                                );
+                                              },
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                      Color(0xFF5E875E),
+                                                    ),
+                                              ),
+                                              child: Text(
+                                                'Yes, I Confirm',
+                                                style: GoogleFonts.inter(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
 
                       // Tab 3: Approved
-                      Center(child: Text('Approved tab')),
+                      approvedStudies.isEmpty
+                          ? buildEmptyState(
+                            'No approved studies yet.\nComplete your reviews to see them here!',
+                          )
+                          : ListView.builder(
+                            itemCount: approvedStudies.length,
+                            itemBuilder: (context, index) {
+                              final study = approvedStudies[index];
+                              final studyId = study['study']['id'];
+                              final title = study['study']['title'];
+                              final department = study['study']['department'];
+                              final type = study['study']['type'];
+                              final subtitle = '$department - $type';
+
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  top: index == 0 ? 0 : 16.0,
+                                ),
+                                child: buildSubmissionCard(
+                                  title,
+                                  subtitle,
+                                  null,
+                                  () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            'Confirmation',
+                                            style: GoogleFonts.inter(
+                                              fontSize: 21.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xFF5E875E),
+                                            ),
+                                          ),
+                                          content: Text(
+                                            'Please ensure you already have the paper of this study submitted to you before evaluating.',
+                                            style: GoogleFonts.inter(
+                                              color: Color(0xFF5E875E),
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text(
+                                                'Cancel',
+                                                style: GoogleFonts.inter(
+                                                  color: Color(0xFF5E875E),
+                                                ),
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(
+                                                  context,
+                                                ).pushReplacement(
+                                                  MaterialPageRoute(
+                                                    builder:
+                                                        (context) =>
+                                                            FeedbackScreen(
+                                                              studyId: studyId,
+                                                              studyTitle: title,
+                                                              studyType: type,
+                                                            ),
+                                                  ),
+                                                );
+                                              },
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                      Color(0xFF5E875E),
+                                                    ),
+                                              ),
+                                              child: Text(
+                                                'Yes, I Confirm',
+                                                style: GoogleFonts.inter(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
                     ],
                   ),
                 ),

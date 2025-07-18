@@ -2,6 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+Widget buildEmptyState(String message) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          LucideIcons.inbox,
+          size: 48,
+          color: Color(0xFF5E875E).withOpacity(0.5),
+        ),
+        SizedBox(height: 16),
+        Text(
+          message,
+          style: GoogleFonts.inter(
+            color: Color(0xFF5E875E).withOpacity(0.7),
+            fontSize: 16,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+  );
+}
+
 Widget buildTextField(
   String hint,
   TextEditingController controller, {
@@ -95,7 +119,12 @@ Widget buildButton(String text, VoidCallback onPressed) {
   );
 }
 
-Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
+Widget buildSubmissionCard(
+  String title,
+  String subtitle,
+  String? details,
+  VoidCallback? onTap,
+) {
   return Container(
     padding: EdgeInsets.all(12.0),
     decoration: BoxDecoration(
@@ -145,6 +174,20 @@ Widget buildSubmissionCard(String title, String subtitle, VoidCallback onTap) {
                   fontSize: 10,
                 ),
               ),
+              if (details != null && details.trim().isNotEmpty)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 4),
+                    Text(
+                      details,
+                      style: GoogleFonts.inter(
+                        color: Color(0xFF5E875E),
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
+                ),
             ],
           ),
         ),

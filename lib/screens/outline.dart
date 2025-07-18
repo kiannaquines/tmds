@@ -97,71 +97,7 @@ class _OutlineScreenState extends State<OutlineScreen> {
               final subtitle = '$department - $type';
               return Padding(
                 padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
-                child: buildSubmissionCard(title, subtitle, () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text(
-                          'Confirmation',
-                          style: GoogleFonts.inter(
-                            fontSize: 21.0,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF5E875E),
-                          ),
-                        ),
-                        content: Text(
-                          'Are you sure you want to evaluate this study?',
-                          style: GoogleFonts.inter(
-                            color: Color(0xFF5E875E),
-                            fontSize: 13,
-                          ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'Cancel',
-                              style: GoogleFonts.inter(
-                                color: Color(0xFF5E875E),
-                              ),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => FeedbackScreen(
-                                        studyId: studyId,
-                                        studyTitle: title,
-                                        studyType: type,
-                                      ),
-                                ),
-                              );
-                            },
-                            style: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all(
-                                const Color(0xFFFFFFFF),
-                              ),
-                              backgroundColor: MaterialStateProperty.all(
-                                const Color(0xFF5E875E),
-                              ),
-                            ),
-                            child: Text(
-                              'Confirm',
-                              style: GoogleFonts.inter(
-                                color: Color(0xFFFFFFFF),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }),
+                child: buildSubmissionCard(title, subtitle, null, () {}),
               );
             }),
             if (outline.isEmpty)

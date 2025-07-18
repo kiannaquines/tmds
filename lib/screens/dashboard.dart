@@ -129,7 +129,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12.0),
-                child: buildSubmissionCard('$type: $title', subtitle, () {
+                child: buildSubmissionCard('$type: $title', subtitle, null, () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => ThesisStatusScreen(studyId: id),
