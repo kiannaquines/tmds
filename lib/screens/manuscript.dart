@@ -61,9 +61,7 @@ class _ManuscriptScreenState extends State<ManuscriptScreen> {
           showActions: true,
           withLeading: true,
           locationScreen: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => FacultyDashboardScreen()),
-            );
+            Navigator.of(context).pop();
           },
         ),
       ),

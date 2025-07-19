@@ -348,9 +348,9 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                   onTap: () {
                                     showConfirmationDialogMessage(
                                       context,
-                                      studyId,
-                                      title,
-                                      type,
+                                      studyId: studyId,
+                                      title: title,
+                                      type: type,
                                     );
                                   },
                                 ),

@@ -63,10 +63,7 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
         child: MyAppbar(
           title: 'My Submissions',
           showActions: true,
-          locationScreen:
-              () => Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => DashboardScreen()),
-              ),
+          locationScreen: () => Navigator.of(context).pop(),
           withLeading: true,
         ),
       ),

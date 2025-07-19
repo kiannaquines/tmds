@@ -25,139 +25,162 @@ Widget buildBulletPoint(String text) {
 }
 
 Future<void> showConfirmationDialogMessage(
-  BuildContext context,
-  int studyId,
-  String title,
-  String type,
-) {
-  return showDialog(
+  BuildContext context, {
+  required int studyId,
+  required String title,
+  required String type,
+  bool showChecklist = true,
+}) async {
+  await showDialog(
     context: context,
+    barrierDismissible: false, // Prevent accidental dismissal
     builder: (BuildContext context) {
       return Dialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(20.0),
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        child: Container(
-          padding: EdgeInsets.all(24),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 24,
+                spreadRadius: 2,
+              ),
+            ],
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header with icon
+              // Header with animated icon
               Row(
                 children: [
-                  Container(
-                    padding: EdgeInsets.all(8),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Color(0xFF5E875E).withOpacity(0.1),
+                      color: const Color(0xFF5E875E).withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                      LucideIcons.badgeHelp,
+                    child: const Icon(
+                      LucideIcons.clipboardCheck,
                       color: Color(0xFF5E875E),
                       size: 24,
                     ),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Text(
-                    'Confirmation Required',
+                    'Evaluation Confirmation',
                     style: GoogleFonts.inter(
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF5E875E),
+                      color: const Color(0xFF5E875E),
+                      letterSpacing: -0.3,
                     ),
                   ),
                 ],
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 24),
 
               // Content
               Text(
                 'Before proceeding to evaluate this study, please confirm:',
-                style: GoogleFonts.inter(color: Colors.black87, fontSize: 14),
-              ),
-
-              SizedBox(height: 8),
-
-              // Bullet points
-              Padding(
-                padding: EdgeInsets.only(left: 8),
-                child: Column(
-                  children: [
-                    buildBulletPoint('You have received the complete paper'),
-                    buildBulletPoint('You have reviewed the study details'),
-                    buildBulletPoint('You are ready to provide feedback'),
-                  ],
+                style: GoogleFonts.inter(
+                  color: Colors.black87,
+                  fontSize: 14,
+                  height: 1.5,
                 ),
               ),
 
-              SizedBox(height: 24),
+              const SizedBox(height: 16),
 
-              // Buttons
+              // Bullet points with check animation
+              if (showChecklist) ...[
+                _buildAnimatedCheckItem('You have received the complete paper'),
+                const SizedBox(height: 8),
+                _buildAnimatedCheckItem('You have reviewed the study details'),
+                const SizedBox(height: 8),
+                _buildAnimatedCheckItem('You are ready to provide feedback'),
+                const SizedBox(height: 24),
+              ],
+
+              // Buttons with focus states
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  // Cancel Button
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     style: TextButton.styleFrom(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
                         vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: BorderSide(color: Colors.grey.shade400, width: 1),
                       ),
                     ),
                     child: Text(
-                      'Cancel',
+                      'Not Ready',
                       style: GoogleFonts.inter(
                         color: Colors.grey.shade700,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 12),
+                  // Confirm Button
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) => FeedbackScreen(
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (_, __, ___) => FeedbackScreen(
                                 studyId: studyId,
                                 studyTitle: title,
                                 studyType: type,
                               ),
+                          transitionsBuilder: (_, animation, __, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: const Duration(milliseconds: 200),
                         ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF5E875E),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 12,
+                      backgroundColor: const Color(0xFF5E875E),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 14,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
+                      elevation: 0,
+                      shadowColor: Colors.transparent,
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(LucideIcons.check, size: 18, color: Colors.white),
+                        Icon(LucideIcons.check, size: 18),
                         SizedBox(width: 8),
-                        Text(
-                          'Confirm',
-                          style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                        Text('Begin'),
                       ],
                     ),
                   ),
@@ -168,6 +191,33 @@ Future<void> showConfirmationDialogMessage(
         ),
       );
     },
+  );
+}
+
+Widget _buildAnimatedCheckItem(String text) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Container(
+        margin: const EdgeInsets.only(top: 2),
+        child: Icon(
+          LucideIcons.check,
+          size: 16,
+          color: const Color(0xFF5E875E).withOpacity(0.7),
+        ),
+      ),
+      const SizedBox(width: 8),
+      Expanded(
+        child: Text(
+          text,
+          style: GoogleFonts.inter(
+            color: Colors.black87,
+            fontSize: 13,
+            height: 1.4,
+          ),
+        ),
+      ),
+    ],
   );
 }
 
@@ -287,76 +337,76 @@ Future<void> showPendingDialogMessage(
   );
 }
 
-Widget buildEmptyState(String message) {
-  return Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          LucideIcons.inbox,
-          size: 48,
-          color: Color(0xFF5E875E).withOpacity(0.5),
-        ),
-        SizedBox(height: 16),
-        Text(
-          message,
-          style: GoogleFonts.inter(
-            color: Color(0xFF5E875E).withOpacity(0.7),
-            fontSize: 16,
+Widget buildEmptyState(
+  String message, {
+  IconData icon = LucideIcons.inbox,
+  Color? iconColor,
+  double iconSize = 56,
+  String? actionText,
+  VoidCallback? onAction,
+  double verticalPadding = 24,
+}) {
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: verticalPadding),
+    child: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Icon with subtle background circle
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF5E875E).withOpacity(0.08),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              size: iconSize,
+              color: iconColor ?? const Color(0xFF5E875E).withOpacity(0.5),
+            ),
           ),
-          textAlign: TextAlign.center,
-        ),
-      ],
+          const SizedBox(height: 24),
+          // Message text
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Text(
+              message,
+              style: GoogleFonts.inter(
+                color: const Color(0xFF5E875E).withOpacity(0.8),
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          // Optional action button
+          if (actionText != null && onAction != null) ...[
+            const SizedBox(height: 24),
+            SizedBox(
+              width: 160,
+              child: ElevatedButton(
+                onPressed: onAction,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF5E875E),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+                child: Text(
+                  actionText,
+                  style: GoogleFonts.inter(fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
     ),
   );
 }
-
-// Widget buildTextField(
-//   String hint,
-//   TextEditingController controller, {
-//   GestureTapCallback? onTap,
-//   bool isPassword = false,
-//   bool readOnly = false,
-//   bool isNumeric = false,
-//   int maxLines = 5,
-// }) {
-//   return Container(
-//     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-//     decoration: BoxDecoration(
-//       color: Colors.white,
-//       borderRadius: BorderRadius.circular(12),
-//       boxShadow: [
-//         BoxShadow(
-//           color: const Color(0xFF5E875E).withOpacity(0.2),
-//           blurRadius: 8,
-//           spreadRadius: 2,
-//         ),
-//       ],
-//     ),
-//     child: TextField(
-//       onTap: onTap,
-//       keyboardType: isNumeric ? TextInputType.phone : TextInputType.text,
-//       maxLines: maxLines,
-//       readOnly: readOnly,
-//       cursorColor: Color(0xFF5E875E),
-//       controller: controller,
-//       obscureText: isPassword,
-//       style: GoogleFonts.inter(
-//         color: Color(0xFF5E875E),
-//         fontSize: 15,
-//         fontWeight: FontWeight.w400,
-//       ),
-//       decoration: InputDecoration.collapsed(
-//         hintText: hint,
-//         hintStyle: GoogleFonts.inter(
-//           color: Color(0xFF5E875E),
-//           fontSize: 15,
-//           fontWeight: FontWeight.w400,
-//         ),
-//       ),
-//     ),
-//   );
-// }
 
 Widget buildTextField(
   String hint,
@@ -479,27 +529,64 @@ Widget buildGreenButton(
   );
 }
 
-Widget buildButton(String text, VoidCallback onPressed) {
+Widget buildButton(
+  String text,
+  VoidCallback onPressed, {
+  bool isFullWidth = true,
+  bool isDisabled = false,
+  IconData? icon,
+  double borderRadius = 12.0,
+  EdgeInsetsGeometry? padding,
+  Color? backgroundColor,
+  Color? textColor,
+  double? elevation,
+  bool showShadow = true,
+  bool showOverlay = true,
+}) {
+  final buttonColor = backgroundColor ?? const Color(0xFFEBF0EB);
+  final disabledColor = buttonColor.withOpacity(0.5);
+
   return SizedBox(
-    width: double.infinity,
+    width: isFullWidth ? double.infinity : null,
     child: ElevatedButton(
-      onPressed: onPressed,
+      onPressed: isDisabled ? null : onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFFEBF0EB),
-        padding: EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        elevation: 1,
-        shadowColor: Color(0xFF5E875E).withOpacity(0.2),
-        overlayColor: Color(0xFF5E875E).withOpacity(0.1),
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      ),
-      child: Text(
-        text,
-        style: GoogleFonts.inter(
-          color: Color(0xFF5E875E),
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
+        backgroundColor: isDisabled ? disabledColor : buttonColor,
+        foregroundColor: textColor ?? const Color(0xFF5E875E),
+        padding:
+            padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+          side: BorderSide(
+            color: const Color(0xFF5E875E).withOpacity(0.1),
+            width: 1,
+          ),
         ),
+        elevation: elevation ?? (showShadow ? 2 : 0),
+        shadowColor:
+            showShadow
+                ? const Color(0xFF5E875E).withOpacity(0.2)
+                : Colors.transparent,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        animationDuration: const Duration(milliseconds: 150),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 20, color: textColor ?? const Color(0xFF5E875E)),
+            const SizedBox(width: 12),
+          ],
+          Text(
+            text,
+            style: GoogleFonts.inter(
+              color: textColor ?? const Color(0xFF5E875E),
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.3,
+            ),
+          ),
+        ],
       ),
     ),
   );

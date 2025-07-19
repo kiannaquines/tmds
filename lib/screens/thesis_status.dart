@@ -126,17 +126,8 @@ class _ThesisStatusScreenState extends State<ThesisStatusScreen> {
                 ),
               ),
             if (studyTimeLine.isEmpty)
-              Container(
-                color: const Color(0xFFE8F2E8),
-                padding: const EdgeInsets.all(12.0),
-                width: double.infinity,
-                child: Text(
-                  'Oops! No progress has been recorded for this study yet.',
-                  style: GoogleFonts.inter(
-                    fontSize: 15,
-                    color: const Color(0xFF5E875E),
-                  ),
-                ),
+              buildEmptyState(
+                'Oops! No progress has been recorded for this study yet.',
               ),
           ],
         ),
