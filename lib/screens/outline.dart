@@ -88,7 +88,6 @@ class _OutlineScreenState extends State<OutlineScreen> {
               final index = entry.key;
               final study = entry.value;
 
-              // final studyId = study['id'];
               final title = study['title'];
               final department = study['department'];
               final type = study['type'];
@@ -100,7 +99,9 @@ class _OutlineScreenState extends State<OutlineScreen> {
               );
             }),
             if (outline.isEmpty)
-              buildEmptyState('Oppss, No outline papers yet comeback later...'),
+              buildEmptyState(
+                'Oppss, No outline papers yet please comeback later...',
+              ),
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:tdms_faculty/components/my_appbar.dart';
 import 'package:tdms_faculty/screens/signin.dart';
 import 'package:tdms_faculty/components/widgets.dart';
@@ -34,7 +35,6 @@ class _CreateFacultyAccountScreenState
   final _rolesController = TextEditingController();
 
   List<String> _roles = [];
-  List<String> _selectedRole = [];
 
   Future<void> fetchRoles() async {
     final url = Uri.parse('$apiUrl/roles');
@@ -68,7 +68,7 @@ class _CreateFacultyAccountScreenState
     final name = _fullnameController.text.trim();
     final password = _passwordController.text.trim();
     final confirmPassword = _confirmPasswordController.text.trim();
-    final role = _selectedRole;
+    final role = _rolesController.text.trim();
 
     final url = Uri.parse('$apiUrl/register/faculty');
     final response = await http.post(
@@ -101,10 +101,26 @@ class _CreateFacultyAccountScreenState
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => SignInScreen()),
       );
+    } else if (response.statusCode == 422) {
+      final detailedErrors =
+          responseData['errors'] as Map<String, dynamic>? ?? {};
+
+      detailedErrors.forEach((field, errors) {
+        if (errors is List) {
+          for (var error in errors) {
+            showMessageSnackbar(context, error.toString());
+          }
+        } else {
+          showMessageSnackbar(context, errors.toString());
+        }
+      });
+
+      setState(() {
+        isSubmitting = false;
+      });
     } else {
       final message = responseData['message'] ?? 'Registration failed';
       showMessageSnackbar(context, message);
-
       setState(() {
         isSubmitting = false;
       });
@@ -206,20 +222,49 @@ class _CreateFacultyAccountScreenState
       dropDown: DropDown<String>(
         isDismissible: true,
         enableMultipleSelection: false,
+        isSearchVisible: true,
+
         bottomSheetTitle: const Text(
-          'Select Role',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          'Select your role',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF5E875E),
+            fontSize: 20.0,
+          ),
         ),
+
         dropDownBackgroundColor: Colors.white,
-        submitButtonText: 'Save',
-        clearButtonText: 'Clear',
+
+        searchFillColor: Color(0xFFF7FCF7),
+        searchCursorColor: Color(0xFF5E875E),
+
+        searchWidget: TextFormField(
+          style: GoogleFonts.inter(fontSize: 14, color: Color(0xFF5E875E)),
+          cursorColor: Color(0xFF5E875E),
+          decoration: InputDecoration(
+            prefixIcon: Icon(LucideIcons.search, color: Color(0xFF5E875E)),
+            filled: true,
+            fillColor: Color(0xFFF7FCF7),
+            hintText: 'Search',
+            hintStyle: GoogleFonts.inter(
+              fontSize: 14,
+              color: Color(0xFF5E875E).withOpacity(0.6),
+            ),
+            contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Color(0xFF5E875E).withOpacity(0.3)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Color(0xFF5E875E), width: 1.2),
+            ),
+          ),
+        ),
+
         data:
-            _roles
-                .map(
-                  (municipality) =>
-                      SelectedListItem<String>(data: municipality),
-                )
-                .toList(),
+            _roles.map((role) => SelectedListItem<String>(data: role)).toList(),
+
         onSelected: (selectedItems) {
           if (selectedItems.isNotEmpty) {
             setState(() {

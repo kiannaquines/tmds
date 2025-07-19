@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static ThemeData buildTheme() {
-    // Define a consistent color palette
+    // My Color Scheme
     const Color primaryColor = Color(0xFF5E875E);
     const Color secondaryColor = Color(0xFF0D1C0D);
     const Color scaffoldBgColor = Color(0xFFF7FCF7);
@@ -11,7 +11,6 @@ class AppTheme {
     const Color onSurfaceColor = Color(0xFF1A1A1A);
     const Color hintColor = Color(0xFF757575);
 
-    // Create a ColorScheme that works well with Material 3
     final ColorScheme colorScheme = ColorScheme.light(
       primary: primaryColor,
       secondary: primaryColor.withOpacity(0.8),
@@ -26,18 +25,15 @@ class AppTheme {
       brightness: Brightness.light,
     );
 
-    // Base theme with Material 3
     final ThemeData base = ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
     );
 
     return base.copyWith(
-      // Scaffold & app-wide settings
       scaffoldBackgroundColor: scaffoldBgColor,
       visualDensity: VisualDensity.adaptivePlatformDensity,
 
-      // AppBar theme
       appBarTheme: AppBarTheme(
         scrolledUnderElevation: 0,
         backgroundColor: surfaceColor,
@@ -51,7 +47,6 @@ class AppTheme {
         surfaceTintColor: Colors.transparent,
       ),
 
-      // Text themes
       textTheme: GoogleFonts.interTextTheme(base.textTheme).copyWith(
         displayLarge: GoogleFonts.inter(
           fontSize: 57,
@@ -80,7 +75,6 @@ class AppTheme {
         ),
       ),
 
-      // Input decoration theme (for TextFields)
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: surfaceColor,
@@ -92,7 +86,6 @@ class AppTheme {
         hintStyle: GoogleFonts.inter(color: hintColor, fontSize: 14),
       ),
 
-      // Dropdown menu theme
       dropdownMenuTheme: DropdownMenuThemeData(
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
@@ -115,7 +108,6 @@ class AppTheme {
         ),
       ),
 
-      // Checkbox theme
       checkboxTheme: CheckboxThemeData(
         fillColor: MaterialStateProperty.resolveWith<Color>((states) {
           if (states.contains(MaterialState.selected)) {
