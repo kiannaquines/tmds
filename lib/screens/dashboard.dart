@@ -140,18 +140,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             }),
 
             if (mySubmissions.isEmpty)
-              Container(
-                color: Color(0xFFE8F2E8),
-                padding: EdgeInsets.all(12.0),
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  'Oppss, No submissions yet...',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    color: Color(0xFF5E875E),
-                  ),
-                ),
-              ),
+              buildEmptyState('Oppss, No submissions yet...'),
             SizedBox(height: 32),
             Text(
               'Notifications',
@@ -191,18 +180,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             }),
 
             if (myNotification.isEmpty)
-              Container(
-                color: Color(0xFFE8F2E8),
-                padding: EdgeInsets.all(12.0),
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  'Oppss, No notification yet...',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    color: Color(0xFF5E875E),
-                  ),
-                ),
-              ),
+              buildEmptyState('Oppss, No notification yet...'),
           ],
         ),
       ),

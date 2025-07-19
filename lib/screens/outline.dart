@@ -8,7 +8,6 @@ import 'package:tdms_faculty/components/utils.dart';
 import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/constants.dart';
 import 'package:tdms_faculty/screens/faculty_dashboard.dart';
-import 'package:tdms_faculty/screens/feedback.dart';
 
 class OutlineScreen extends StatefulWidget {
   const OutlineScreen({super.key});
@@ -89,7 +88,7 @@ class _OutlineScreenState extends State<OutlineScreen> {
               final index = entry.key;
               final study = entry.value;
 
-              final studyId = study['id'];
+              // final studyId = study['id'];
               final title = study['title'];
               final department = study['department'];
               final type = study['type'];

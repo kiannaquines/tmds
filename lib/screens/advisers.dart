@@ -125,18 +125,7 @@ class _MyAdvisersState extends State<MyAdvisers> {
             }),
 
             if (myAdvisers.isEmpty)
-              Container(
-                color: Color(0xFFE8F2E8),
-                padding: EdgeInsets.all(12.0),
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  'Oppss, No advisees yet...',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    color: Color(0xFF5E875E),
-                  ),
-                ),
-              ),
+              buildEmptyState('Oppss, No advisees yet comeback later...'),
             SizedBox(height: 16),
             Text(
               'My Panels',
@@ -166,18 +155,7 @@ class _MyAdvisersState extends State<MyAdvisers> {
             }),
 
             if (myPanels.isEmpty)
-              Container(
-                color: Color(0xFFE8F2E8),
-                padding: EdgeInsets.all(12.0),
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  'Oppss, No panels yet...',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    color: Color(0xFF5E875E),
-                  ),
-                ),
-              ),
+              buildEmptyState('Oppss, No panels yet comeback later...'),
           ],
         ),
       ),

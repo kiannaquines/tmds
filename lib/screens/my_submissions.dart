@@ -110,18 +110,7 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
             }),
 
             if (mySubmissions.isEmpty)
-              Container(
-                color: Color(0xFFE8F2E8),
-                padding: EdgeInsets.all(12.0),
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  'Oppss, No submissions yet...',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    color: Color(0xFF5E875E),
-                  ),
-                ),
-              ),
+              buildEmptyState('Oppss, No submissions yet comeback later...'),
           ],
         ),
       ),

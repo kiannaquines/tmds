@@ -1,6 +1,175 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:tdms_faculty/screens/feedback.dart';
+
+Widget buildBulletPoint(String text) {
+  return Padding(
+    padding: EdgeInsets.only(bottom: 6),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 4, right: 8),
+          child: Icon(LucideIcons.circle, size: 8, color: Color(0xFF5E875E)),
+        ),
+        Expanded(
+          child: Text(
+            text,
+            style: GoogleFonts.inter(color: Colors.black87, fontSize: 14),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Future<void> showConfirmationDialogMessage(
+  BuildContext context,
+  int studyId,
+  String title,
+  String type,
+) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header with icon
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF5E875E).withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      LucideIcons.badgeHelp,
+                      color: Color(0xFF5E875E),
+                      size: 24,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    'Confirmation Required',
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF5E875E),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 20),
+
+              // Content
+              Text(
+                'Before proceeding to evaluate this study, please confirm:',
+                style: GoogleFonts.inter(color: Colors.black87, fontSize: 14),
+              ),
+
+              SizedBox(height: 8),
+
+              // Bullet points
+              Padding(
+                padding: EdgeInsets.only(left: 8),
+                child: Column(
+                  children: [
+                    buildBulletPoint('You have received the complete paper'),
+                    buildBulletPoint('You have reviewed the study details'),
+                    buildBulletPoint('You are ready to provide feedback'),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 24),
+
+              // Buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                    ),
+                    child: Text(
+                      'Cancel',
+                      style: GoogleFonts.inter(
+                        color: Colors.grey.shade700,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => FeedbackScreen(
+                                studyId: studyId,
+                                studyTitle: title,
+                                studyType: type,
+                              ),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF5E875E),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(LucideIcons.check, size: 18, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
+                          'Confirm',
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 
 Widget buildEmptyState(String message) {
   return Center(
@@ -216,17 +385,6 @@ Widget buildNotificationCard(String title, String subtitle, String timeAgo) {
     ),
     child: Row(
       children: [
-        Container(
-          width: 48,
-          height: 48,
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Color(0xFFE8F2E8),
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Icon(LucideIcons.bell, color: Color(0xFF5E875E), size: 24),
-        ),
-        SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

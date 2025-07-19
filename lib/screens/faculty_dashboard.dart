@@ -188,7 +188,6 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                   padding: const EdgeInsets.only(top: 16.0),
                   child: TabBarView(
                     children: [
-                      // Tab 1: Pending
                       pendingStudies.isEmpty
                           ? buildEmptyState(
                             'No pending studies to review.\nAll caught up!',
@@ -212,69 +211,11 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                   subtitle,
                                   null,
                                   () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            'Confirmation',
-                                            style: GoogleFonts.inter(
-                                              fontSize: 21.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF5E875E),
-                                            ),
-                                          ),
-                                          content: Text(
-                                            'Please ensure you already have the paper of this study submitted to you before evaluating.',
-                                            style: GoogleFonts.inter(
-                                              color: Color(0xFF5E875E),
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                'Cancel',
-                                                style: GoogleFonts.inter(
-                                                  color: Color(0xFF5E875E),
-                                                ),
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.of(
-                                                  context,
-                                                ).pushReplacement(
-                                                  MaterialPageRoute(
-                                                    builder:
-                                                        (context) =>
-                                                            FeedbackScreen(
-                                                              studyId: studyId,
-                                                              studyTitle: title,
-                                                              studyType: type,
-                                                            ),
-                                                  ),
-                                                );
-                                              },
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                      Color(0xFF5E875E),
-                                                    ),
-                                              ),
-                                              child: Text(
-                                                'Yes, I Confirm',
-                                                style: GoogleFonts.inter(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
+                                    showConfirmationDialogMessage(
+                                      context,
+                                      studyId,
+                                      title,
+                                      type,
                                     );
                                   },
                                 ),
@@ -282,7 +223,6 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                             },
                           ),
 
-                      // Tab 2: In Progress
                       inProgressStudies.isEmpty
                           ? buildEmptyState(
                             'No studies in progress.\nStart reviewing pending studies!',
@@ -306,69 +246,11 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                   subtitle,
                                   null,
                                   () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            'Confirmation',
-                                            style: GoogleFonts.inter(
-                                              fontSize: 21.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF5E875E),
-                                            ),
-                                          ),
-                                          content: Text(
-                                            'Please ensure you already have the paper of this study submitted to you before evaluating.',
-                                            style: GoogleFonts.inter(
-                                              color: Color(0xFF5E875E),
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                'Cancel',
-                                                style: GoogleFonts.inter(
-                                                  color: Color(0xFF5E875E),
-                                                ),
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.of(
-                                                  context,
-                                                ).pushReplacement(
-                                                  MaterialPageRoute(
-                                                    builder:
-                                                        (context) =>
-                                                            FeedbackScreen(
-                                                              studyId: studyId,
-                                                              studyTitle: title,
-                                                              studyType: type,
-                                                            ),
-                                                  ),
-                                                );
-                                              },
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                      Color(0xFF5E875E),
-                                                    ),
-                                              ),
-                                              child: Text(
-                                                'Yes, I Confirm',
-                                                style: GoogleFonts.inter(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
+                                    showConfirmationDialogMessage(
+                                      context,
+                                      studyId,
+                                      title,
+                                      type,
                                     );
                                   },
                                 ),
@@ -376,7 +258,6 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                             },
                           ),
 
-                      // Tab 3: Approved
                       approvedStudies.isEmpty
                           ? buildEmptyState(
                             'No approved studies yet.\nComplete your reviews to see them here!',
@@ -399,72 +280,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                   title,
                                   subtitle,
                                   null,
-                                  () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            'Confirmation',
-                                            style: GoogleFonts.inter(
-                                              fontSize: 21.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF5E875E),
-                                            ),
-                                          ),
-                                          content: Text(
-                                            'Please ensure you already have the paper of this study submitted to you before evaluating.',
-                                            style: GoogleFonts.inter(
-                                              color: Color(0xFF5E875E),
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                'Cancel',
-                                                style: GoogleFonts.inter(
-                                                  color: Color(0xFF5E875E),
-                                                ),
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.of(
-                                                  context,
-                                                ).pushReplacement(
-                                                  MaterialPageRoute(
-                                                    builder:
-                                                        (context) =>
-                                                            FeedbackScreen(
-                                                              studyId: studyId,
-                                                              studyTitle: title,
-                                                              studyType: type,
-                                                            ),
-                                                  ),
-                                                );
-                                              },
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                      Color(0xFF5E875E),
-                                                    ),
-                                              ),
-                                              child: Text(
-                                                'Yes, I Confirm',
-                                                style: GoogleFonts.inter(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  },
+                                  () {},
                                 ),
                               );
                             },

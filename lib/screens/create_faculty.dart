@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tdms_faculty/components/my_appbar.dart';
@@ -6,6 +7,7 @@ import 'package:tdms_faculty/screens/signin.dart';
 import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:drop_down_list/drop_down_list.dart';
 
 class CreateFacultyAccountScreen extends StatefulWidget {
   const CreateFacultyAccountScreen({super.key});
@@ -30,7 +32,7 @@ class _CreateFacultyAccountScreenState
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   List<String> _roles = [];
-  String? _selectedRole;
+  List<String> _selectedRole = [];
 
   Future<void> fetchRoles() async {
     final url = Uri.parse('$apiUrl/roles');
@@ -136,13 +138,28 @@ class _CreateFacultyAccountScreenState
             SizedBox(height: 16),
             buildTextField('Fullname', _fullnameController, maxLines: 1),
             SizedBox(height: 16),
-            buildDropdown('Select Role', _selectedRole, _roles, (
-              String? newValue,
-            ) {
-              setState(() {
-                _selectedRole = newValue;
-              });
-            }),
+            DropDownState<String>(
+  dropDown: DropDown<String>(
+    data: <SelectedListItem<String>>[
+      SelectedListItem<String>(data: 'Tokyo'),
+      SelectedListItem<String>(data: 'New York'),
+      SelectedListItem<String>(data: 'London'),
+    ],
+    onSelected: (selectedItems) {
+      List<String> list = [];
+      for (var item in selectedItems) {
+        list.add(item.data);
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            list.toString(),
+          ),
+        ),
+      );
+    },
+  ),
+).showModal(context);
             SizedBox(height: 16),
             buildTextField(
               'Password',
