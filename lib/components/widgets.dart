@@ -198,6 +198,7 @@ Widget buildEmptyState(String message) {
 Widget buildTextField(
   String hint,
   TextEditingController controller, {
+  GestureTapCallback? onTap,
   bool isPassword = false,
   bool readOnly = false,
   bool isNumeric = false,
@@ -217,6 +218,7 @@ Widget buildTextField(
       ],
     ),
     child: TextField(
+      onTap: onTap,
       keyboardType: isNumeric ? TextInputType.phone : TextInputType.text,
       maxLines: maxLines,
       readOnly: readOnly,

@@ -31,6 +31,8 @@ class _CreateFacultyAccountScreenState
   final _fullnameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _rolesController = TextEditingController();
+
   List<String> _roles = [];
   List<String> _selectedRole = [];
 
@@ -138,28 +140,12 @@ class _CreateFacultyAccountScreenState
             SizedBox(height: 16),
             buildTextField('Fullname', _fullnameController, maxLines: 1),
             SizedBox(height: 16),
-            DropDownState<String>(
-  dropDown: DropDown<String>(
-    data: <SelectedListItem<String>>[
-      SelectedListItem<String>(data: 'Tokyo'),
-      SelectedListItem<String>(data: 'New York'),
-      SelectedListItem<String>(data: 'London'),
-    ],
-    onSelected: (selectedItems) {
-      List<String> list = [];
-      for (var item in selectedItems) {
-        list.add(item.data);
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            list.toString(),
-          ),
-        ),
-      );
-    },
-  ),
-).showModal(context);
+            buildTextField(
+              'Faculty Role',
+              _rolesController,
+              onTap: onRoleTextFieldTap,
+              maxLines: 1,
+            ),
             SizedBox(height: 16),
             buildTextField(
               'Password',
@@ -213,5 +199,35 @@ class _CreateFacultyAccountScreenState
         ),
       ),
     );
+  }
+
+  void onRoleTextFieldTap() {
+    DropDownState<String>(
+      dropDown: DropDown<String>(
+        isDismissible: true,
+        enableMultipleSelection: false,
+        bottomSheetTitle: const Text(
+          'Select Role',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        ),
+        dropDownBackgroundColor: Colors.white,
+        submitButtonText: 'Save',
+        clearButtonText: 'Clear',
+        data:
+            _roles
+                .map(
+                  (municipality) =>
+                      SelectedListItem<String>(data: municipality),
+                )
+                .toList(),
+        onSelected: (selectedItems) {
+          if (selectedItems.isNotEmpty) {
+            setState(() {
+              _rolesController.text = selectedItems.first.data;
+            });
+          }
+        },
+      ),
+    ).showModal(context);
   }
 }
