@@ -144,7 +144,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             }),
 
             if (mySubmissions.isEmpty)
-              buildEmptyState('Oppss, No submissions yet...'),
+              buildEmptyState(
+                "Oh ohh, No don't have any \n submissions yet...",
+              ),
             SizedBox(height: 32),
             Text(
               'Notifications',
@@ -184,7 +186,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             }),
 
             if (myNotification.isEmpty)
-              buildEmptyState('Oppss, No notification yet...'),
+              buildEmptyState(
+                'Oharyyy No you dont have any \n notification yet...',
+              ),
           ],
         ),
       ),

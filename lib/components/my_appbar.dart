@@ -92,55 +92,129 @@ class _MyAppbarState extends State<MyAppbar> {
                   onPressed: () {
                     showDialog(
                       context: context,
+                      barrierDismissible:
+                          true, // Allows tapping outside to dismiss
                       builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text(
-                            'Logout?',
-                            style: GoogleFonts.inter(
-                              fontSize: 21.0,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF5E875E),
+                        return Dialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          elevation: 0,
+                          backgroundColor: Colors.transparent,
+                          child: Container(
+                            padding: const EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(
+                                    0xFF5E875E,
+                                  ).withOpacity(0.1),
+                                  blurRadius: 24,
+                                  spreadRadius: 4,
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Header
+                                Text(
+                                  'Logout?',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFF5E875E),
+                                    height: 1.3,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                // Body text
+                                Text(
+                                  'Are you sure you want to logout from your account?',
+                                  style: GoogleFonts.inter(
+                                    color: const Color(
+                                      0xFF5E875E,
+                                    ).withOpacity(0.8),
+                                    fontSize: 14,
+                                    height: 1.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 24),
+                                // Buttons
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    // Cancel Button
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      style: TextButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 12,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        'Cancel',
+                                        style: GoogleFonts.inter(
+                                          color: const Color(
+                                            0xFF5E875E,
+                                          ).withOpacity(0.8),
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    // Logout Button
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        Navigator.pop(
+                                          context,
+                                        ); // Close dialog first
+                                        await logout(); // Then perform logout
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(
+                                          0xFF5E875E,
+                                        ),
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                          vertical: 12,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                          side: BorderSide(
+                                            color: const Color(
+                                              0xFF5E875E,
+                                            ).withOpacity(0.2),
+                                            width: 1,
+                                          ),
+                                        ),
+                                        elevation: 0,
+                                        shadowColor: Colors.transparent,
+                                      ),
+                                      child: Text(
+                                        'Yes, Logout',
+                                        style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          content: Text(
-                            'Are you sure you want to logout this account?',
-                            style: GoogleFonts.inter(
-                              color: Color(0xFF5E875E),
-                              fontSize: 13,
-                            ),
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(
-                                'Cancel',
-                                style: GoogleFonts.inter(
-                                  color: Color(0xFF5E875E),
-                                ),
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () async {
-                                await logout();
-                              },
-                              style: ButtonStyle(
-                                foregroundColor: MaterialStateProperty.all(
-                                  const Color(0xFFFFFFFF),
-                                ),
-                                backgroundColor: MaterialStateProperty.all(
-                                  const Color(0xFF5E875E),
-                                ),
-                              ),
-                              child: Text(
-                                'Yes, Logout',
-                                style: GoogleFonts.inter(
-                                  color: Color(0xFFFFFFFF),
-                                ),
-                              ),
-                            ),
-                          ],
                         );
                       },
                     );

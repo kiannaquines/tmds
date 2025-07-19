@@ -116,68 +116,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 ),
               ),
               SizedBox(height: 16),
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 4,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Color(0xFFE8F2E8),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Icon(
-                        Icons.description,
-                        color: Color(0xFF5E875E),
-                        size: 24.0,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.studyTitle,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w400,
-                              color: Color(0xFF5E875E),
-                              fontSize: 15,
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            widget.studyType,
-                            style: GoogleFonts.inter(
-                              color: Color(0xFF5E875E),
-                              fontSize: 10,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16),
               buildTextField(
                 'Enter evaluation comment here...',
+                maxLines: 5,
                 _feedbackController,
               ),
               SizedBox(height: 16),

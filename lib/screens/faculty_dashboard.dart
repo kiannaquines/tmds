@@ -160,24 +160,63 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
 
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(12.0),
+                  border: Border.all(
+                    color: const Color(0xFF5E875E).withOpacity(0.1),
+                    width: 1.0,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF5E875E).withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-                height: 48,
-                width: MediaQuery.of(context).size.width,
+                height: 60,
+                width: double.infinity,
                 child: TabBar(
                   indicator: BoxDecoration(
-                    color: Color(0xFF5E875E),
-                    borderRadius: BorderRadius.circular(12.0),
+                    color: const Color(0xFF5E875E),
+                    borderRadius: BorderRadius.circular(8.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF5E875E).withOpacity(0.2),
+                        blurRadius: 4,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
                   ),
                   dividerColor: Colors.transparent,
                   indicatorSize: TabBarIndicatorSize.tab,
+                  labelStyle: GoogleFonts.inter(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  unselectedLabelStyle: GoogleFonts.inter(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
                   labelColor: Colors.white,
-                  unselectedLabelColor: Color(0xFF5E875E),
+                  unselectedLabelColor: const Color(
+                    0xFF5E875E,
+                  ).withOpacity(0.7),
+                  splashFactory: NoSplash.splashFactory,
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
                   tabs: const [
-                    Tab(icon: Icon(LucideIcons.layoutList)),
-                    Tab(icon: Icon(LucideIcons.notebookPen)),
-                    Tab(icon: Icon(LucideIcons.listCheck)),
+                    Tab(
+                      icon: Icon(LucideIcons.layoutList, size: 20),
+                      text: 'Pending',
+                    ),
+                    Tab(
+                      icon: Icon(LucideIcons.notebookPen, size: 20),
+                      text: 'In Progress',
+                    ),
+                    Tab(
+                      icon: Icon(LucideIcons.listCheck, size: 20),
+                      text: 'Approved',
+                    ),
                   ],
                 ),
               ),
@@ -209,11 +248,75 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                   title,
                                   subtitle,
                                   onTap: () {
-                                    showConfirmationDialogMessage(
+                                    showPendingDialogMessage(
                                       context,
                                       studyId,
                                       title,
                                       type,
+                                      onSubmit: () async {
+                                        final token = await getToken();
+                                        final response = await http.post(
+                                          Uri.parse(
+                                            '$apiUrl/thesis-status/$studyId',
+                                          ),
+                                          headers: {
+                                            'Accept': 'application/json',
+                                            'Content-Type': 'application/json',
+                                            if (token != null)
+                                              'Authorization': 'Bearer $token',
+                                          },
+                                          body: jsonEncode({
+                                            'status': 'In Progress',
+                                          }),
+                                        );
+                                        final responseBody = jsonDecode(
+                                          response.body,
+                                        );
+                                        debugPrint(responseBody.toString());
+                                        switch (response.statusCode) {
+                                          case 200:
+                                          case 401:
+                                          case 404:
+                                            final message =
+                                                responseBody['message'];
+                                            showMessageSnackbar(
+                                              context,
+                                              message,
+                                              isError: false,
+                                            );
+                                            break;
+                                          case 422:
+                                            final detailedErrors =
+                                                responseBody['errors']
+                                                    as Map<String, dynamic>? ??
+                                                {};
+
+                                            detailedErrors.forEach((
+                                              field,
+                                              errors,
+                                            ) {
+                                              if (errors is List) {
+                                                for (var error in errors) {
+                                                  showMessageSnackbar(
+                                                    context,
+                                                    error.toString(),
+                                                  );
+                                                }
+                                              } else {
+                                                showMessageSnackbar(
+                                                  context,
+                                                  errors.toString(),
+                                                );
+                                              }
+                                            });
+                                          default:
+                                            showMessageSnackbar(
+                                              context,
+                                              'Error has been occured',
+                                              isError: true,
+                                            );
+                                        }
+                                      },
                                     );
                                   },
                                 ),
