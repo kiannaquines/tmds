@@ -104,7 +104,6 @@ class _ThesisStatusScreenState extends State<ThesisStatusScreen> {
                         final String checkBy = timeline['checked_by'] ?? '';
                         final String createdAt = timeline['created_at'] ?? '';
                         final String status = timeline['status'] ?? '';
-                        final String roles = timeline['checked_by_roles'] ?? '';
 
                         DateTime createdDate =
                             DateTime.tryParse(createdAt) ?? DateTime.now();
@@ -116,7 +115,7 @@ class _ThesisStatusScreenState extends State<ThesisStatusScreen> {
                           ),
                           child: buildTimelineItem(
                             title: checkBy,
-                            role: roles,
+                            role: '',
                             subtitle: comment,
                             timeAgo: timeAgo,
                             status: status,

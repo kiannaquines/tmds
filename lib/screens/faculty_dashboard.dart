@@ -318,6 +318,11 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                         }
                                       },
                                     );
+                                    setState(() {
+                                      _fetchPendingStudies();
+                                      _fetchInProgressStudies();
+                                      _fetchApprovedtudies();
+                                    });
                                   },
                                 ),
                               );

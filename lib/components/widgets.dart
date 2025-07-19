@@ -233,62 +233,103 @@ Future<void> showPendingDialogMessage(
     builder: (BuildContext context) {
       return Dialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(20.0),
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
         child: Container(
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF5E875E).withOpacity(0.1),
+                blurRadius: 24,
+                spreadRadius: 2,
+                offset: const Offset(0, 4),
+              ),
+            ],
+            border: Border.all(
+              color: const Color(0xFF5E875E).withOpacity(0.08),
+              width: 1,
+            ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header with icon
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Color(0xFF5E875E).withOpacity(0.1),
+                      color: const Color(0xFF5E875E).withOpacity(0.1),
                       shape: BoxShape.circle,
+                      border: Border.all(
+                        color: const Color(0xFF5E875E).withOpacity(0.2),
+                        width: 1,
+                      ),
                     ),
                     child: Icon(
-                      LucideIcons.badgeHelp,
-                      color: Color(0xFF5E875E),
+                      LucideIcons.clock,
+                      color: const Color(0xFF5E875E),
                       size: 24,
                     ),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Text(
-                    'Confirmation Required',
+                    'Mark as In Progress',
                     style: GoogleFonts.inter(
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF5E875E),
+                      color: const Color(0xFF5E875E),
+                      letterSpacing: -0.3,
                     ),
                   ),
                 ],
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 24),
               Text(
-                'Are you sure you want to update the status of the study into In Progress?',
-                style: GoogleFonts.inter(color: Colors.black87, fontSize: 14),
+                'Are you sure you want to update this study status to "In Progress"?',
+                style: GoogleFonts.inter(
+                  color: Colors.black87,
+                  fontSize: 15,
+                  height: 1.5,
+                ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 8),
+              Container(
+                padding: EdgeInsets.all(12.0),
+                decoration: BoxDecoration(color: Color(0xFFF7FCF7)),
+                child: Text(
+                  'This action will notify the researcher.',
+                  style: GoogleFonts.inter(
+                    color: Color(0xFF5E875E),
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     style: TextButton.styleFrom(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 14,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(
+                          color: Colors.grey.shade400,
+                          width: 1.5,
+                        ),
                       ),
                     ),
                     child: Text(
@@ -296,32 +337,36 @@ Future<void> showPendingDialogMessage(
                       style: GoogleFonts.inter(
                         color: Colors.grey.shade700,
                         fontWeight: FontWeight.w500,
+                        fontSize: 14,
                       ),
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 12),
                   ElevatedButton(
                     onPressed: onSubmit,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF5E875E),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 12,
+                      backgroundColor: const Color(0xFF5E875E),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 14,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(10),
                       ),
+                      elevation: 2,
+                      shadowColor: const Color(0xFF5E875E).withOpacity(0.3),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(LucideIcons.check, size: 18, color: Colors.white),
-                        SizedBox(width: 8),
+                        Icon(LucideIcons.check, size: 20),
+                        const SizedBox(width: 8),
                         Text(
                           'Confirm',
                           style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
                           ),
                         ),
                       ],
@@ -1006,7 +1051,7 @@ Widget buildTimelineItem({
                       color: const Color(0xFF5E875E).withOpacity(0.7),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 5),
                   // Description
                   Text(
                     subtitle,
