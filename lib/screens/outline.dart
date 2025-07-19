@@ -95,7 +95,7 @@ class _OutlineScreenState extends State<OutlineScreen> {
               final subtitle = '$department - $type';
               return Padding(
                 padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
-                child: buildSubmissionCard(title, subtitle, null, () {}),
+                child: buildSubmissionCard(title, subtitle),
               );
             }),
             if (outline.isEmpty)

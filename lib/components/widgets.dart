@@ -292,10 +292,10 @@ Widget buildButton(String text, VoidCallback onPressed) {
 
 Widget buildSubmissionCard(
   String title,
-  String subtitle,
+  String subtitle, {
   String? details,
   VoidCallback? onTap,
-) {
+}) {
   return Container(
     padding: EdgeInsets.all(12.0),
     decoration: BoxDecoration(

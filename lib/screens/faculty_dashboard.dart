@@ -8,7 +8,6 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/constants.dart';
 import 'package:tdms_faculty/screens/advisee.dart';
-import 'package:tdms_faculty/screens/feedback.dart';
 import 'package:tdms_faculty/screens/manuscript.dart';
 import 'package:tdms_faculty/screens/outline.dart';
 import 'package:tdms_faculty/components/utils.dart';
@@ -209,8 +208,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                 child: buildSubmissionCard(
                                   title,
                                   subtitle,
-                                  null,
-                                  () {
+                                  onTap: () {
                                     showConfirmationDialogMessage(
                                       context,
                                       studyId,
@@ -244,8 +242,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                 child: buildSubmissionCard(
                                   title,
                                   subtitle,
-                                  null,
-                                  () {
+                                  onTap: () {
                                     showConfirmationDialogMessage(
                                       context,
                                       studyId,
@@ -266,7 +263,6 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                             itemCount: approvedStudies.length,
                             itemBuilder: (context, index) {
                               final study = approvedStudies[index];
-                              final studyId = study['study']['id'];
                               final title = study['study']['title'];
                               final department = study['study']['department'];
                               final type = study['study']['type'];
@@ -276,12 +272,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                 padding: EdgeInsets.only(
                                   top: index == 0 ? 0 : 16.0,
                                 ),
-                                child: buildSubmissionCard(
-                                  title,
-                                  subtitle,
-                                  null,
-                                  () {},
-                                ),
+                                child: buildSubmissionCard(title, subtitle),
                               );
                             },
                           ),
