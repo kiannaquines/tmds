@@ -139,19 +139,9 @@ class _AdviseeScreenState extends State<AdviseeScreen> {
               );
             }),
 
-            if (myAdvisees.isEmpty)
-              Container(
-                color: Color(0xFFE8F2E8),
-                padding: EdgeInsets.all(12.0),
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  'Oppss, No advisees yet...',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    color: Color(0xFF5E875E),
-                  ),
-                ),
-              ),
+            if (myAdvisees.isEmpty) ...[
+              buildEmptyState('Oppss, No advisees yet...'),
+            ],
             SizedBox(height: 16),
             Text(
               'Students',
@@ -241,18 +231,7 @@ class _AdviseeScreenState extends State<AdviseeScreen> {
             }),
 
             if (myStudent.isEmpty)
-              Container(
-                color: Color(0xFFE8F2E8),
-                padding: EdgeInsets.all(12.0),
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  'No student included you as a panel...',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    color: Color(0xFF5E875E),
-                  ),
-                ),
-              ),
+              buildEmptyState('No student included you as a panel...'),
           ],
         ),
       ),

@@ -59,10 +59,12 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
     );
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      setState(() {
-        departments =
-            data.map<String>((item) => item['name'].toString()).toList();
-      });
+      if (mounted) {
+        setState(() {
+          departments =
+              data.map<String>((item) => item['name'].toString()).toList();
+        });
+      }
     } else {
       showMessageSnackbar(context, 'Failed to fetch department list.');
     }
@@ -81,10 +83,12 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
     );
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      setState(() {
-        studyTypes =
-            data.map<String>((item) => item['type'].toString()).toList();
-      });
+      if (mounted) {
+        setState(() {
+          studyTypes =
+              data.map<String>((item) => item['type'].toString()).toList();
+        });
+      }
     } else {
       showMessageSnackbar(context, 'Failed to fetch study type list.');
     }

@@ -41,11 +41,11 @@ class _MyAdvisersState extends State<MyAdvisers> {
     if (response.statusCode == 200) {
       final List<dynamic> data = responseBody['data'];
 
-      setState(() {
-        myAdvisers = data.cast<Map<String, dynamic>>();
-      });
-    } else {
-      showMessageSnackbar(context, responseBody['message']);
+      if (mounted) {
+        setState(() {
+          myAdvisers = data.cast<Map<String, dynamic>>();
+        });
+      }
     }
   }
 
@@ -62,11 +62,11 @@ class _MyAdvisersState extends State<MyAdvisers> {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = responseBody['data'];
-      setState(() {
-        myPanels = data.cast<Map<String, dynamic>>();
-      });
-    } else {
-      showMessageSnackbar(context, responseBody['message']);
+      if (mounted) {
+        setState(() {
+          myPanels = data.cast<Map<String, dynamic>>();
+        });
+      }
     }
   }
 

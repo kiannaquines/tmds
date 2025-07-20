@@ -48,11 +48,11 @@ class _ThesisStatusScreenState extends State<ThesisStatusScreen> {
     if (response.statusCode == 200) {
       final List<dynamic> data = responseBody['data'];
 
-      setState(() {
-        studyTimeLine = data.cast<Map<String, dynamic>>();
-      });
-    } else {
-      showMessageSnackbar(context, responseBody['message']);
+      if (mounted) {
+        setState(() {
+          studyTimeLine = data.cast<Map<String, dynamic>>();
+        });
+      }
     }
   }
 

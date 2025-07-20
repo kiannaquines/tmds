@@ -92,8 +92,7 @@ class _MyAppbarState extends State<MyAppbar> {
                   onPressed: () {
                     showDialog(
                       context: context,
-                      barrierDismissible:
-                          true, // Allows tapping outside to dismiss
+                      barrierDismissible: true,
                       builder: (BuildContext context) {
                         return Dialog(
                           shape: RoundedRectangleBorder(
@@ -120,7 +119,6 @@ class _MyAppbarState extends State<MyAppbar> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Header
                                 Text(
                                   'Logout?',
                                   style: GoogleFonts.inter(
@@ -131,7 +129,6 @@ class _MyAppbarState extends State<MyAppbar> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                // Body text
                                 Text(
                                   'Are you sure you want to logout from your account?',
                                   style: GoogleFonts.inter(
@@ -143,11 +140,9 @@ class _MyAppbarState extends State<MyAppbar> {
                                   ),
                                 ),
                                 const SizedBox(height: 24),
-                                // Buttons
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    // Cancel Button
                                     TextButton(
                                       onPressed: () => Navigator.pop(context),
                                       style: TextButton.styleFrom(
@@ -172,13 +167,10 @@ class _MyAppbarState extends State<MyAppbar> {
                                       ),
                                     ),
                                     const SizedBox(width: 8),
-                                    // Logout Button
                                     ElevatedButton(
                                       onPressed: () async {
-                                        Navigator.pop(
-                                          context,
-                                        ); // Close dialog first
-                                        await logout(); // Then perform logout
+                                        Navigator.pop(context);
+                                        await logout();
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color(

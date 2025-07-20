@@ -48,11 +48,11 @@ class _ManuscriptScreenState extends State<ManuscriptScreen> {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> data = responseBody['data'];
 
-      setState(() {
-        manuscript = data.cast<Map<String, dynamic>>();
-      });
-    } else {
-      showMessageSnackbar(context, 'Failed to fetch studies submissions.');
+      if (mounted) {
+        setState(() {
+          manuscript = data.cast<Map<String, dynamic>>();
+        });
+      }
     }
   }
 

@@ -52,11 +52,11 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> data = responseBody['data'];
 
-      setState(() {
-        mySubmissions = data.cast<Map<String, dynamic>>();
-      });
-    } else {
-      showMessageSnackbar(context, 'Failed to fetch submissions.');
+      if (mounted) {
+        setState(() {
+          mySubmissions = data.cast<Map<String, dynamic>>();
+        });
+      }
     }
   }
 

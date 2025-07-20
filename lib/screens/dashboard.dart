@@ -56,9 +56,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> data = responseBody['data'];
 
-      setState(() {
-        mySubmissions = data.cast<Map<String, dynamic>>();
-      });
+      if (mounted) {
+        setState(() {
+          mySubmissions = data.cast<Map<String, dynamic>>();
+        });
+      }
     } else {
       showMessageSnackbar(
         context,
@@ -85,9 +87,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (response.statusCode == 200) {
       final List<dynamic> data = responseBody['data'];
 
-      setState(() {
-        myNotification = data.cast<Map<String, dynamic>>();
-      });
+      if (mounted) {
+        setState(() {
+          myNotification = data.cast<Map<String, dynamic>>();
+        });
+      }
     } else if (response.statusCode == 401 || response.statusCode == 404) {
       showMessageSnackbar(context, 'No notification found', isError: false);
     }

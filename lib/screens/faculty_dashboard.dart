@@ -23,7 +23,6 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
   int _selectedIndex = 0;
   String? userName;
   String? userRole;
-  bool _isDisposed = false;
 
   @override
   void initState() {
@@ -37,22 +36,19 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
 
   @override
   void dispose() {
-    _isDisposed = true;
     super.dispose();
   }
 
   Future<void> _loadUserName() async {
-    if (_isDisposed) return;
     final name = await fetchUserName();
-    if (!_isDisposed && mounted) {
+    if (mounted) {
       setState(() => userName = name);
     }
   }
 
   Future<void> _loadUserRole() async {
-    if (_isDisposed) return;
     final role = await fetchUserRole();
-    if (!_isDisposed && mounted) {
+    if (mounted) {
       setState(() => userRole = role);
     }
   }
@@ -74,15 +70,15 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
       },
     );
 
-    final Map<String, dynamic> responseBody = jsonDecode(response.body);
     if (response.statusCode == 200) {
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> data = responseBody['data'];
 
-      setState(() {
-        pendingStudies = data.cast<Map<String, dynamic>>();
-      });
-    } else {
-      showMessageSnackbar(context, responseBody['message']);
+      if (mounted) {
+        setState(() {
+          pendingStudies = data.cast<Map<String, dynamic>>();
+        });
+      }
     }
   }
 
@@ -99,15 +95,15 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
       },
     );
 
-    final Map<String, dynamic> responseBody = jsonDecode(response.body);
     if (response.statusCode == 200) {
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> data = responseBody['data'];
 
-      setState(() {
-        inProgressStudies = data.cast<Map<String, dynamic>>();
-      });
-    } else {
-      showMessageSnackbar(context, responseBody['message']);
+      if (mounted) {
+        setState(() {
+          inProgressStudies = data.cast<Map<String, dynamic>>();
+        });
+      }
     }
   }
 
@@ -127,13 +123,11 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> data = responseBody['data'];
-
-      setState(() {
-        approvedStudies = data.cast<Map<String, dynamic>>();
-      });
-    } else {
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      showMessageSnackbar(context, responseBody['message']);
+      if (mounted) {
+        setState(() {
+          approvedStudies = data.cast<Map<String, dynamic>>();
+        });
+      }
     }
   }
 
