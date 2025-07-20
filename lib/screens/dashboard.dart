@@ -102,7 +102,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
-        child: MyAppbar(title: 'Dashboard', showActions: true),
+        child: MyAppbar(title: 'Student Dashboard', showActions: true),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),

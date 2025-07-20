@@ -36,14 +36,14 @@ class _MyAdvisersState extends State<MyAdvisers> {
       if (token != null) 'Authorization': 'Bearer $token',
     };
     final response = await http.get(url, headers: headers);
-    final responseBody = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = responseBody['data'];
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      final data = responseBody['data'];
 
       if (mounted) {
         setState(() {
-          myAdvisers = data.cast<Map<String, dynamic>>();
+          myAdvisers = [data];
         });
       }
     }
@@ -112,7 +112,6 @@ class _MyAdvisersState extends State<MyAdvisers> {
               final adviserName = advisee['adviser_name'] ?? '';
               final adviserEmail = advisee['adviser_email'] ?? '';
               final adviserRole = advisee['role'] ?? '';
-
               return Padding(
                 padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
                 child: buildUserCard(
@@ -146,11 +145,16 @@ class _MyAdvisersState extends State<MyAdvisers> {
 
               final panelName = panel['panel_name'] ?? '';
               final panelEmail = panel['panel_email'] ?? '';
-              final panelRole = panel['role'] ?? '';
-
+              final panelStudyType = panel['study_type'] ?? '';
+              final detailedStatus = 'Your $panelStudyType panel.';
               return Padding(
                 padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
-                child: buildUserCard(panelName, panelEmail, panelRole, () {}),
+                child: buildUserCard(
+                  panelName,
+                  panelEmail,
+                  detailedStatus,
+                  () {},
+                ),
               );
             }),
 

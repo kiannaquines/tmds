@@ -293,18 +293,6 @@ Future<void> showPendingDialogMessage(
                   height: 1.5,
                 ),
               ),
-              const SizedBox(height: 8),
-              Container(
-                padding: EdgeInsets.all(12.0),
-                decoration: BoxDecoration(color: Color(0xFFF7FCF7)),
-                child: Text(
-                  'This action will notify the researcher.',
-                  style: GoogleFonts.inter(
-                    color: Color(0xFF5E875E),
-                    fontSize: 13,
-                  ),
-                ),
-              ),
 
               const SizedBox(height: 24),
 
@@ -1168,7 +1156,6 @@ Widget buildUserCard(
                   style: GoogleFonts.inter(
                     color: const Color(0xFF5E875E).withOpacity(0.6),
                     fontSize: 12,
-                    fontStyle: FontStyle.italic,
                   ),
                 ),
               ],
