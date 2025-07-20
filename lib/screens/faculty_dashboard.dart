@@ -238,7 +238,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                             itemCount: pendingStudies.length,
                             itemBuilder: (context, index) {
                               final study = pendingStudies[index];
-                              final studyId = study['study']['id'];
+                              final studyId = study['study']['id'].toString();
                               final title = study['study']['title'];
                               final department = study['study']['department'];
                               final type = study['study']['type'];
@@ -284,6 +284,12 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                           case 200:
                                           case 401:
                                           case 404:
+                                            if (mounted) {
+                                              setState(() {
+                                                pendingStudies = [];
+                                              });
+                                            }
+
                                             await Future.wait([
                                               _fetchPendingStudies(),
                                               _fetchInProgressStudies(),

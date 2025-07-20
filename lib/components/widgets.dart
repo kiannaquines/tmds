@@ -93,7 +93,7 @@ Future<void> showConfirmationDialogMessage(
               Text(
                 'Before proceeding to evaluate this study, please confirm:',
                 style: GoogleFonts.inter(
-                  color: Colors.black87,
+                  color: const Color(0xFF5E875E).withOpacity(0.8),
                   fontSize: 14,
                   height: 1.5,
                 ),
@@ -205,7 +205,7 @@ Widget _buildAnimatedCheckItem(String text) {
         child: Text(
           text,
           style: GoogleFonts.inter(
-            color: Colors.black87,
+            color: const Color(0xFF5E875E).withOpacity(0.8),
             fontSize: 13,
             height: 1.4,
           ),
@@ -217,7 +217,7 @@ Widget _buildAnimatedCheckItem(String text) {
 
 Future<void> showPendingDialogMessage(
   BuildContext context,
-  int studyId,
+  String studyId,
   String title,
   String type, {
   VoidCallback? onSubmit,
@@ -288,7 +288,7 @@ Future<void> showPendingDialogMessage(
               Text(
                 'Are you sure you want to update this study status to "In Progress"?',
                 style: GoogleFonts.inter(
-                  color: Colors.black87,
+                  color: const Color(0xFF5E875E).withOpacity(0.8),
                   fontSize: 15,
                   height: 1.5,
                 ),
