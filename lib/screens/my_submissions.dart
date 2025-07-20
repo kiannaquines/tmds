@@ -23,6 +23,11 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
     _fetchMySubmissions();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('auth_token');
@@ -63,7 +68,10 @@ class _MySubmissionScreenState extends State<MySubmissionScreen> {
         child: MyAppbar(
           title: 'My Submissions',
           showActions: true,
-          locationScreen: () => Navigator.of(context).pop(),
+          locationScreen:
+              () => Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => DashboardScreen()),
+              ),
           withLeading: true,
         ),
       ),

@@ -23,6 +23,7 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
   int _selectedIndex = 0;
   String? userName;
   String? userRole;
+  bool _isDisposed = false;
 
   @override
   void initState() {
@@ -34,18 +35,26 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
     _fetchApprovedtudies();
   }
 
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
   Future<void> _loadUserName() async {
+    if (_isDisposed) return;
     final name = await fetchUserName();
-    setState(() {
-      userName = name;
-    });
+    if (!_isDisposed && mounted) {
+      setState(() => userName = name);
+    }
   }
 
   Future<void> _loadUserRole() async {
+    if (_isDisposed) return;
     final role = await fetchUserRole();
-    setState(() {
-      userRole = role;
-    });
+    if (!_isDisposed && mounted) {
+      setState(() => userRole = role);
+    }
   }
 
   List<Map<String, dynamic>> pendingStudies = [];
@@ -115,14 +124,15 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
       },
     );
 
-    final Map<String, dynamic> responseBody = jsonDecode(response.body);
     if (response.statusCode == 200) {
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> data = responseBody['data'];
 
       setState(() {
         approvedStudies = data.cast<Map<String, dynamic>>();
       });
     } else {
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
       showMessageSnackbar(context, responseBody['message']);
     }
   }
@@ -272,11 +282,13 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                         final responseBody = jsonDecode(
                                           response.body,
                                         );
-                                        debugPrint(responseBody.toString());
                                         switch (response.statusCode) {
                                           case 200:
                                           case 401:
                                           case 404:
+                                            await _fetchPendingStudies();
+                                            await _fetchInProgressStudies();
+                                            await _fetchApprovedtudies();
                                             final message =
                                                 responseBody['message'];
                                             showMessageSnackbar(
@@ -318,11 +330,6 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                         }
                                       },
                                     );
-                                    setState(() {
-                                      _fetchPendingStudies();
-                                      _fetchInProgressStudies();
-                                      _fetchApprovedtudies();
-                                    });
                                   },
                                 ),
                               );

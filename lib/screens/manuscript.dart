@@ -24,6 +24,11 @@ class _ManuscriptScreenState extends State<ManuscriptScreen> {
     _fetchManuscript();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   List<Map<String, dynamic>> manuscript = [];
 
   Future<void> _fetchManuscript() async {
@@ -61,7 +66,9 @@ class _ManuscriptScreenState extends State<ManuscriptScreen> {
           showActions: true,
           withLeading: true,
           locationScreen: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => FacultyDashboardScreen()),
+            );
           },
         ),
       ),
@@ -100,8 +107,7 @@ class _ManuscriptScreenState extends State<ManuscriptScreen> {
                   onTap: () {
                     showDialog(
                       context: context,
-                      barrierDismissible:
-                          true, // Allows tapping outside to dismiss
+                      barrierDismissible: true,
                       builder: (BuildContext context) {
                         return Dialog(
                           shape: RoundedRectangleBorder(
@@ -128,7 +134,6 @@ class _ManuscriptScreenState extends State<ManuscriptScreen> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Header
                                 Text(
                                   'Confirmation',
                                   style: GoogleFonts.inter(
@@ -139,7 +144,6 @@ class _ManuscriptScreenState extends State<ManuscriptScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 12),
-                                // Body text
                                 Text(
                                   'Are you sure you want to evaluate this study?',
                                   style: GoogleFonts.inter(
@@ -151,11 +155,9 @@ class _ManuscriptScreenState extends State<ManuscriptScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 24),
-                                // Buttons
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    // Cancel Button
                                     TextButton(
                                       onPressed: () => Navigator.pop(context),
                                       style: TextButton.styleFrom(
@@ -180,12 +182,9 @@ class _ManuscriptScreenState extends State<ManuscriptScreen> {
                                       ),
                                     ),
                                     const SizedBox(width: 8),
-                                    // Confirm Button
                                     ElevatedButton(
                                       onPressed: () {
-                                        Navigator.pop(
-                                          context,
-                                        ); // Close dialog first
+                                        Navigator.pop(context);
                                         Navigator.pushReplacement(
                                           context,
                                           PageRouteBuilder(

@@ -7,6 +7,7 @@ import 'package:tdms_faculty/components/utils.dart';
 import 'package:tdms_faculty/components/widgets.dart';
 import 'package:tdms_faculty/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:tdms_faculty/screens/faculty_dashboard.dart';
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({
@@ -90,7 +91,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           showActions: true,
           withLeading: true,
           locationScreen: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => FacultyDashboardScreen()),
+            );
           },
         ),
       ),

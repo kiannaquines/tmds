@@ -60,7 +60,9 @@ class _OutlineScreenState extends State<OutlineScreen> {
           showActions: true,
           withLeading: true,
           locationScreen: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => FacultyDashboardScreen()),
+            );
           },
         ),
       ),

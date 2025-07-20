@@ -33,7 +33,7 @@ Future<void> showConfirmationDialogMessage(
 }) async {
   await showDialog(
     context: context,
-    barrierDismissible: false, // Prevent accidental dismissal
+    barrierDismissible: false,
     builder: (BuildContext context) {
       return Dialog(
         shape: RoundedRectangleBorder(
@@ -60,7 +60,6 @@ Future<void> showConfirmationDialogMessage(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header with animated icon
               Row(
                 children: [
                   AnimatedContainer(
@@ -91,7 +90,6 @@ Future<void> showConfirmationDialogMessage(
 
               const SizedBox(height: 24),
 
-              // Content
               Text(
                 'Before proceeding to evaluate this study, please confirm:',
                 style: GoogleFonts.inter(
@@ -103,7 +101,6 @@ Future<void> showConfirmationDialogMessage(
 
               const SizedBox(height: 16),
 
-              // Bullet points with check animation
               if (showChecklist) ...[
                 _buildAnimatedCheckItem('You have received the complete paper'),
                 const SizedBox(height: 8),
@@ -113,11 +110,9 @@ Future<void> showConfirmationDialogMessage(
                 const SizedBox(height: 24),
               ],
 
-              // Buttons with focus states
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  // Cancel Button
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     style: TextButton.styleFrom(
@@ -139,7 +134,6 @@ Future<void> showConfirmationDialogMessage(
                     ),
                   ),
                   const SizedBox(width: 12),
-                  // Confirm Button
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -397,7 +391,6 @@ Widget buildEmptyState(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Icon with subtle background circle
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -411,7 +404,6 @@ Widget buildEmptyState(
             ),
           ),
           const SizedBox(height: 24),
-          // Message text
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Text(
@@ -425,7 +417,6 @@ Widget buildEmptyState(
               textAlign: TextAlign.center,
             ),
           ),
-          // Optional action button
           if (actionText != null && onAction != null) ...[
             const SizedBox(height: 24),
             SizedBox(
@@ -471,7 +462,7 @@ Widget buildTextField(
           color: const Color(0xFF5E875E).withOpacity(0.1),
           blurRadius: 10,
           spreadRadius: 2,
-          offset: const Offset(0, 3), // Subtle shadow for depth
+          offset: const Offset(0, 3),
         ),
       ],
       border: Border.all(
@@ -489,21 +480,21 @@ Widget buildTextField(
       obscureText: isPassword,
       style: GoogleFonts.inter(
         color: const Color(0xFF5E875E),
-        fontSize: 16, // Slightly larger for better readability
-        fontWeight: FontWeight.w500, // Medium weight for better contrast
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
       ),
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: GoogleFonts.inter(
-          color: const Color(0xFF5E875E).withOpacity(0.5), // Lighter hint text
+          color: const Color(0xFF5E875E).withOpacity(0.5),
           fontSize: 16,
           fontWeight: FontWeight.w400,
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
-          vertical: 14, // Better vertical padding for balance
+          vertical: 14,
         ),
-        border: InputBorder.none, // Remove default underline
+        border: InputBorder.none,
         filled: false,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -753,12 +744,9 @@ Widget buildNotificationCard(
     onTap: onTap,
     child: Container(
       padding: const EdgeInsets.all(16.0),
-      margin: const EdgeInsets.only(bottom: 8.0), // Space between cards
+      margin: const EdgeInsets.only(bottom: 8.0),
       decoration: BoxDecoration(
-        color:
-            isUnread
-                ? const Color(0xFFF0F7F0) // Light green for unread
-                : Colors.white,
+        color: isUnread ? const Color(0xFFF0F7F0) : Colors.white,
         borderRadius: BorderRadius.circular(12.0),
         border: Border.all(
           color: const Color(0xFF5E875E).withOpacity(0.1),
@@ -776,7 +764,6 @@ Widget buildNotificationCard(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Status indicator/icon
           if (icon != null) ...[
             Container(
               padding: const EdgeInsets.all(6.0),
@@ -798,14 +785,14 @@ Widget buildNotificationCard(
               ),
             ),
           ],
-          // Content
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Title with unread emphasis
                 Text(
                   title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.inter(
                     fontWeight: isUnread ? FontWeight.w600 : FontWeight.w500,
                     color: const Color(0xFF5E875E),
@@ -814,7 +801,6 @@ Widget buildNotificationCard(
                   ),
                 ),
                 const SizedBox(height: 6),
-                // Subtitle
                 Text(
                   subtitle,
                   style: GoogleFonts.inter(
@@ -824,7 +810,6 @@ Widget buildNotificationCard(
                   ),
                 ),
                 const SizedBox(height: 6),
-                // Time with subtle styling
                 Text(
                   timeAgo,
                   style: GoogleFonts.inter(
@@ -835,7 +820,6 @@ Widget buildNotificationCard(
               ],
             ),
           ),
-          // Optional tap target
           if (onTap != null) ...[
             const SizedBox(width: 8),
             Icon(
@@ -878,7 +862,7 @@ Widget buildDropdown(
                   color: const Color(0xFF5E875E).withOpacity(0.1),
                   blurRadius: 10,
                   spreadRadius: 2,
-                  offset: const Offset(0, 3), // Subtle depth
+                  offset: const Offset(0, 3),
                 ),
               ]
               : null,
@@ -894,9 +878,9 @@ Widget buildDropdown(
         ),
       ),
       isExpanded: true,
-      underline: const SizedBox(), // Remove default underline
+      underline: const SizedBox(),
       icon: Icon(
-        Icons.keyboard_arrow_down_rounded, // Rounded arrow for modern look
+        Icons.keyboard_arrow_down_rounded,
         color: const Color(0xFF5E875E).withOpacity(0.8),
         size: 24,
       ),
@@ -905,11 +889,9 @@ Widget buildDropdown(
       style: GoogleFonts.inter(
         color: const Color(0xFF5E875E),
         fontSize: 16,
-        fontWeight: FontWeight.w500, // Slightly bolder selected text
+        fontWeight: FontWeight.w500,
       ),
-      borderRadius: BorderRadius.circular(
-        borderRadius - 2,
-      ), // Slightly rounded dropdown
+      borderRadius: BorderRadius.circular(borderRadius - 2),
       items:
           items.map((String item) {
             return DropdownMenuItem<String>(
@@ -947,10 +929,8 @@ Widget buildTimelineItem({
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Timeline indicator
         Column(
           children: [
-            // Indicator dot
             Container(
               width: 24,
               height: 24,
@@ -977,7 +957,6 @@ Widget buildTimelineItem({
                 ),
               ),
             ),
-            // Vertical line
             if (!isLast)
               Container(
                 width: 2,
@@ -990,7 +969,6 @@ Widget buildTimelineItem({
 
         const SizedBox(width: 16),
 
-        // Content card
         Expanded(
           child: Container(
             margin: EdgeInsets.only(bottom: isLast ? 0 : 24),
@@ -1017,7 +995,6 @@ Widget buildTimelineItem({
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header row
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1052,7 +1029,6 @@ Widget buildTimelineItem({
                     ),
                   ),
                   const SizedBox(height: 5),
-                  // Description
                   Text(
                     subtitle,
                     style: GoogleFonts.inter(
@@ -1062,7 +1038,6 @@ Widget buildTimelineItem({
                     ),
                   ),
                   const SizedBox(height: 8),
-                  // Status
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8,
@@ -1149,14 +1124,13 @@ Widget buildUserCard(
       ),
       child: Row(
         children: [
-          // User Avatar/Icon
           Container(
             width: 48,
             height: 48,
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: iconBackgroundColor ?? const Color(0xFFE8F2E8),
-              borderRadius: BorderRadius.circular(8), // Smoother corners
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
               icon ?? LucideIcons.users,
@@ -1166,12 +1140,10 @@ Widget buildUserCard(
           ),
           const SizedBox(width: 16),
 
-          // User Information
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Title
                 Text(
                   title,
                   style: GoogleFonts.inter(
@@ -1181,8 +1153,6 @@ Widget buildUserCard(
                   ),
                 ),
                 const SizedBox(height: 4),
-
-                // Subtitle
                 Text(
                   subtitle,
                   maxLines: 1,
@@ -1193,8 +1163,6 @@ Widget buildUserCard(
                   ),
                 ),
                 const SizedBox(height: 4),
-
-                // Data (with accent style)
                 Text(
                   data,
                   style: GoogleFonts.inter(
@@ -1206,8 +1174,6 @@ Widget buildUserCard(
               ],
             ),
           ),
-
-          // Interactive Arrow
           const SizedBox(width: 8),
           Icon(
             LucideIcons.chevronRight,
