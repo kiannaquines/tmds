@@ -258,6 +258,8 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                       title,
                                       type,
                                       onSubmit: () async {
+                                        Navigator.of(context).pop();
+
                                         final token = await getToken();
                                         final response = await http.post(
                                           Uri.parse(
@@ -273,54 +275,69 @@ class _FacultyDashboardScreenState extends State<FacultyDashboardScreen> {
                                             'status': 'In Progress',
                                           }),
                                         );
+
                                         final responseBody = jsonDecode(
                                           response.body,
                                         );
+
                                         switch (response.statusCode) {
                                           case 200:
                                           case 401:
                                           case 404:
-                                            await _fetchPendingStudies();
-                                            await _fetchInProgressStudies();
-                                            await _fetchApprovedtudies();
+                                            await Future.wait([
+                                              _fetchPendingStudies(),
+                                              _fetchInProgressStudies(),
+                                              _fetchApprovedtudies(),
+                                            ]);
+
                                             final message =
                                                 responseBody['message'];
-                                            showMessageSnackbar(
-                                              context,
-                                              message,
-                                              isError: false,
-                                            );
+                                            if (mounted) {
+                                              showMessageSnackbar(
+                                                context,
+                                                message,
+                                                isError: false,
+                                              );
+                                            }
                                             break;
+
                                           case 422:
                                             final detailedErrors =
                                                 responseBody['errors']
                                                     as Map<String, dynamic>? ??
                                                 {};
-
                                             detailedErrors.forEach((
                                               field,
                                               errors,
                                             ) {
                                               if (errors is List) {
                                                 for (var error in errors) {
-                                                  showMessageSnackbar(
-                                                    context,
-                                                    error.toString(),
-                                                  );
+                                                  if (mounted) {
+                                                    showMessageSnackbar(
+                                                      context,
+                                                      error.toString(),
+                                                    );
+                                                  }
                                                 }
                                               } else {
-                                                showMessageSnackbar(
-                                                  context,
-                                                  errors.toString(),
-                                                );
+                                                if (mounted) {
+                                                  showMessageSnackbar(
+                                                    context,
+                                                    errors.toString(),
+                                                  );
+                                                }
                                               }
                                             });
+                                            break;
+
                                           default:
-                                            showMessageSnackbar(
-                                              context,
-                                              'Error has been occured',
-                                              isError: true,
-                                            );
+                                            if (mounted) {
+                                              showMessageSnackbar(
+                                                context,
+                                                'An error occurred',
+                                                isError: true,
+                                              );
+                                            }
                                         }
                                       },
                                     );

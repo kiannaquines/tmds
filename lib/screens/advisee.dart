@@ -48,14 +48,11 @@ class _AdviseeScreenState extends State<AdviseeScreen> {
     if (response.statusCode == 200) {
       final List<dynamic> data = responseBody['data'];
 
-      setState(() {
-        myAdvisees = data.cast<Map<String, dynamic>>();
-      });
-    } else if (response.statusCode == 401 || response.statusCode == 404) {
-      final errorMessage = responseBody['message'];
-      showMessageSnackbar(context, errorMessage);
-    } else {
-      showMessageSnackbar(context, 'Something went wrong please try again.');
+      if (mounted) {
+        setState(() {
+          myAdvisees = data.cast<Map<String, dynamic>>();
+        });
+      }
     }
   }
 
@@ -75,14 +72,11 @@ class _AdviseeScreenState extends State<AdviseeScreen> {
     if (response.statusCode == 200) {
       final List<dynamic> data = responseBody['data'];
 
-      setState(() {
-        myStudent = data.cast<Map<String, dynamic>>();
-      });
-    } else if (response.statusCode == 401 || response.statusCode == 404) {
-      final errorMessage = responseBody['message'];
-      showMessageSnackbar(context, errorMessage);
-    } else {
-      showMessageSnackbar(context, 'Something went wrong please try again.');
+      if (mounted) {
+        setState(() {
+          myStudent = data.cast<Map<String, dynamic>>();
+        });
+      }
     }
   }
 

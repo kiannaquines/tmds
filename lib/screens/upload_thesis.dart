@@ -37,6 +37,19 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
     _getToken();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _titleController.dispose();
+    _yearController.dispose();
+    _selectedDepartment = '';
+    _selectedPanel1 = '';
+    _selectedPanel2 = '';
+    _selectedPanel3 = '';
+    _selectedStudyType = '';
+    _selectedAdviser = '';
+  }
+
   List<String> departments = [];
   List<String> faculty = [];
   List<String> studyTypes = [];
@@ -298,11 +311,5 @@ class _UploadThesisScreenState extends State<UploadThesisScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    super.dispose();
   }
 }

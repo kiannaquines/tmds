@@ -21,6 +21,12 @@ class _ForgotScreenState extends State<ForgotScreen> {
   final _emailController = TextEditingController();
   bool _isLoading = false;
 
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+  }
+
   Future<void> forgotPassword() async {
     final email = _emailController.text.trim();
     setState(() {

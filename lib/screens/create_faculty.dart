@@ -20,12 +20,6 @@ class CreateFacultyAccountScreen extends StatefulWidget {
 
 class _CreateFacultyAccountScreenState
     extends State<CreateFacultyAccountScreen> {
-  @override
-  void initState() {
-    super.initState();
-    fetchRoles();
-  }
-
   bool isSubmitting = false;
 
   final _emailController = TextEditingController();
@@ -33,6 +27,22 @@ class _CreateFacultyAccountScreenState
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _rolesController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchRoles();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _fullnameController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _rolesController.dispose();
+  }
 
   List<String> _roles = [];
 
@@ -51,9 +61,11 @@ class _CreateFacultyAccountScreenState
       final Map<String, dynamic> jsonData = jsonDecode(response.body);
       final List<dynamic> data = jsonData['data'];
 
-      setState(() {
-        _roles = data.map<String>((item) => item['role'].toString()).toList();
-      });
+      if (mounted) {
+        setState(() {
+          _roles = data.map<String>((item) => item['role'].toString()).toList();
+        });
+      }
     } else {
       showMessageSnackbar(context, 'You have an empty roles, please add.');
     }

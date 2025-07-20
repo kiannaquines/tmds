@@ -23,6 +23,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _fullnameController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+  }
+
   Future<void> register() async {
     setState(() {
       isSubmitting = true;
