@@ -42,6 +42,7 @@ class _AuthGateState extends State<AuthGate> {
         return const DashboardScreen();
 
       case 'Adviser':
+      case 'Faculty':
       case 'Department Research Coordinator':
       case 'Department Chairperson':
       case 'College Research Coordinator':
