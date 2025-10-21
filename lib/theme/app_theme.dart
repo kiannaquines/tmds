@@ -138,13 +138,14 @@ class AppTheme {
         showUnselectedLabels: true,
       ),
 
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: surfaceColor,
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         surfaceTintColor: Colors.transparent,
       ),
+
 
       dividerTheme: const DividerThemeData(
         color: Color(0xFFEEEEEE),
